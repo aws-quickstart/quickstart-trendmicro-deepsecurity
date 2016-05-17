@@ -44,5 +44,3 @@ curl -k -v -H "Content-Type: text/xml;charset=UTF-8" -H 'SOAPAction: "systemSett
 '</urn:systemSettingSet>'\
 '</soapenv:Body>'\
 '</soapenv:Envelope'\>
-
-
