@@ -131,3 +131,4 @@ esac
 ## log out
 curl -k -X DELETE https://localhost:$3/rest/authentication/logout?sID="$SID"
 exit 0
+
