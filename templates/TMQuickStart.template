@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion" : "2010-09-09",
-    "Description"              : "QS(0011) - v3.4 Quick Start that deploys Trend Micro Deep Security into an exisintg VPC with a Multi-AZ Oracle RDS instance  **WARNING** This template uses images from the AWS Marketplace and an active subscription is required - Please see the Quick Start documentation for more details. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Description"              : "QS(0011) - v3.7 Quick Start that deploys Trend Micro Deep Security into an exisintg VPC with a Multi-AZ Oracle RDS instance  **WARNING** This template uses images from the AWS Marketplace and an active subscription is required - Please see the Quick Start documentation for more details. You will be billed for the AWS resources used if you create a stack from this template.",
     "Metadata" : {
 		"AWS::CloudFormation::Interface" : {
 			"ParameterGroups" : [
@@ -285,9 +285,9 @@
 										"Ref" : "ProtectedInstances"
 									},
 									"Size"
-								]
+								]	
 							}
-						]
+						]				
 					},
 					"DBIStorageAllocation"         : {
 						"Fn::FindInMap" : [
@@ -296,7 +296,7 @@
 								"Ref" : "ProtectedInstances"
 							},
 								"Size"
-						]
+						]					
 					},
 					"DBPBackupDays"         : "5",
 					"DBPCreateDbInstance"         : "Yes" ,
@@ -330,9 +330,9 @@
 										"Ref" : "ProtectedInstances"
 									},
 									"Size"
-								]
+								]	
 							}
-						]
+						]		
 					},
 					"DBISubnet1"         : {
                         "Ref" : "DatabaseSubnet1"
@@ -367,11 +367,18 @@
 					"eu-west-1"
 				]
 		},
+		"RegionIsApSoutheast2" : {
+			"Fn::Equals" : [
+				{ "Ref" : "AWS::Region" },
+				"ap-southeast-2"
+			]
+		},
 		"PerHostSupportedRegion"	: {
 			"Fn::Or" : [
 				{ "Condition" : "RegionIsWest2" },
 				{ "Condition" : "RegionIsEast1" },
-				{ "Condition" : "RegionIsEuWest1" }
+				{ "Condition" : "RegionIsEuWest1" },
+				{ "Condition" : "RegionIsApSoutheast2" }
 			]
 		}
 	},
