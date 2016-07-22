@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion" : "2010-09-09",
-    "Description"              : "QS(0011) - v3.4 Quick Start that deploys Trend Micro Deep Security into an exisintg VPC with a Multi-AZ Oracle RDS instance  **WARNING** This template uses images from the AWS Marketplace and an active subscription is required - Please see the Quick Start documentation for more details. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Description"              : "QS(0011) - v3.7 Quick Start that deploys Trend Micro Deep Security into an exisintg VPC with a Multi-AZ Oracle RDS instance  **WARNING** This template uses images from the AWS Marketplace and an active subscription is required - Please see the Quick Start documentation for more details. You will be billed for the AWS resources used if you create a stack from this template.",
         "Metadata" : {
 		"AWS::CloudFormation::Interface" : {
 			"ParameterGroups" : [
@@ -14,7 +14,7 @@
 				},
 				{
 					"Label" : { "default" : "RDS Configuration" },
-					"Parameters" : [ "DatabaseEngine", "DatabaseInstanceID", "DatabaseAdminName", "DatabaseAdminPassword" ]
+					"Parameters" : [ "DatabaseEngine", "DatabaseInstanceId", "DatabaseAdminName", "DatabaseAdminPassword" ]
 				}
 
 			],
@@ -121,7 +121,7 @@
             "MaxLength"   : 41,
             "AllowedPattern" : "[a-zA-Z0-9!^*\\-_+]*",
             "ConstraintDescription" : "Can only contain alphanumeric characters or the following special characters !^*-_+ Min length 8, max length 41"
-        },
+        },        
 		"LicenseKey"       : {
             "Description" : "If you have a Deep Security license key, enter it here. Including dashes (e.g. AP-E9RM-99WHE-B5UR5-BV8YB-HVYM8-HYYVG).",
             "Type"        : "String",
@@ -282,7 +282,7 @@
 							"RDSInstanceSize",
 							{	"Ref" : "AWS::Region" },
 							{	"Ref" : "DatabaseEngine" }
-						]
+						]	
 					},
 					"DBIStorageAllocation"         : "250",
 					"DBPBackupDays"         : "5",
@@ -323,7 +323,7 @@
 							"DSMSIZE",
 							{	"Ref" : "AWS::Region" },
 							"BYOL"
-						]
+						]		
 					},
 					"DBISubnet1"         : {
                         "Ref" : "DatabaseSubnet1"
@@ -340,7 +340,7 @@
 							"RDSMultiAZ",
 							{	"Ref" : "AWS::Region" },
 							{	"Ref" : "DatabaseEngine" }
-						]
+						]		
 					},
 					"CfnUrlPrefix" : { "Fn::FindInMap" : [ "Parameters", "CfnUrlPrefix", "Prefix" ] }
                 }
