@@ -367,7 +367,7 @@
         },
         "CfnUrlPrefix": {
             "Type": "String",
-            "Default": "https://s3.amazonaws.com/quickstart-reference/trendmicro/deepsecurity/latest/templates"
+            "Default": "https://s3.amazonaws.com/quickstart-reference/trendmicro/deepsecurity/latest/templates/"
         },
         "DSCLicenseType": {
             "Type": "String",
