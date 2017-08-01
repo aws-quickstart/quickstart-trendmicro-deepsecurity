@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   v5.3: This template is an abstraction layer for choosing PostgreSQL, Oracle or
-  MSSQL when deploying Deep Security Manager
+  MSSQL when deploying Deep Security Manager (qs-1ngr590i4).
 Parameters:
   DBIRDSInstanceSize:
     Default: db.m3.large
@@ -92,26 +92,45 @@ Parameters:
     Description: Choose a private subnets in the same VPC for the RDS instance
     Type: 'AWS::EC2::Subnet::Id'
     ConstraintDescription: >-
-      RDS Subnet Groups must be comprised of 2 subnets in seperate availability
+      RDS Subnet Groups must be comprised of 2 subnets in separate availability
       zones with the specified VPC for deploying this template
   DBISubnet2:
     Description: Choose private subnets in the same VPC for this RDS instance
     Type: 'AWS::EC2::Subnet::Id'
     ConstraintDescription: >-
-      RDS Subnet Groups must be comprised of 2 subnets in seperate availability
+      RDS Subnet Groups must be comprised of 2 subnets in separate availability
       zones with the specified VPC for deploying this template
-  CfnUrlPrefix:
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters,
+      uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: quickstart-reference
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
     Type: String
-    Default: 'https://s3.amazonaws.com/trend-micro-quick-start/latest/'
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/). It cannot start or end
+      with forward slash (/) because they are automatically appended.
+    Default: trendmicro/deepsecurity/latest
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can
+      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash
+      (/).
+    Type: String
 Resources:
   DSOracleRDS:
     Type: 'AWS::CloudFormation::Stack'
     Condition: DBTypeIsOracle
     Properties:
-      TemplateURL: !Join 
-        - ''
-        - - !Ref CfnUrlPrefix
-          - templates/common/db/DSDBOracleRDS.template
+      TemplateURL: !Sub
+              - >-
+                https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/DSDBOracleRDS.template
+              - QSS3Region: !If
+                  - GovCloudCondition
+                  - s3-us-gov-west-1
+                  - s3
       TimeoutInMinutes: '10'
       Parameters:
         DBIRDSInstanceSize: !Ref DBIRDSInstanceSize
@@ -127,10 +146,13 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Condition: DBTypeIsSQL
     Properties:
-      TemplateURL: !Join 
-        - ''
-        - - !Ref CfnUrlPrefix
-          - templates/common/db/DSDBSQLRDS.template
+      TemplateURL: !Sub
+              - >-
+                https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/DSDBSQLRDS.template
+              - QSS3Region: !If
+                  - GovCloudCondition
+                  - s3-us-gov-west-1
+                  - s3
       TimeoutInMinutes: '10'
       Parameters:
         DBIRDSInstanceSize: !Ref DBIRDSInstanceSize
@@ -146,10 +168,13 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Condition: DBTypeIsPostgreSQL
     Properties:
-      TemplateURL: !Join 
-        - ''
-        - - !Ref CfnUrlPrefix
-          - templates/common/db/DSDBPostgreSQL.template
+      TemplateURL: !Sub
+              - >-
+                https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/DSDBPostgreSQL.template
+              - QSS3Region: !If
+                  - GovCloudCondition
+                  - s3-us-gov-west-1
+                  - s3
       TimeoutInMinutes: '10'
       Parameters:
         DBIRDSInstanceSize: !Ref DBIRDSInstanceSize
@@ -178,6 +203,9 @@ Conditions:
   DBTypeIsPostgreSQL: !Equals 
     - !Ref DBPEngine
     - PostgreSQL
+  GovCloudCondition: !Equals
+    - !Ref 'AWS::Region'
+    - us-gov-west-1
 Outputs:
   DSDBEndpoint:
     Value: !If 

@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  v5.3: Quick Start that deploys Trend Micro Deep Security into an existing VPC
+  QS(0011) - v5.3: Quick Start that deploys Trend Micro Deep Security into an existing VPC
   with a Multi-AZ PostgreSQL RDS instance  **WARNING** This template uses images
   from the AWS Marketplace and an active subscription is required - Please see
   the Quick Start documentation for more details. You will be billed for the AWS
-  resources used if you create a stack from this template.
+  resources used if you create a stack from this template (qs-1ngr590k4).
 Metadata:
   'AWS::CloudFormation::Interface':
     ParameterGroups:
@@ -120,73 +120,24 @@ Parameters:
       - 501-1000
       - 1001-2000
   QSS3BucketName:
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
-      end with a hyphen (-).
-    Default: trend-micro-quick-start
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters,
+      uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: quickstart-reference
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
   QSS3KeyPrefix:
-    AllowedPattern: ^[0-9a-zA-Z-.]+(/[0-9a-zA-Z-.]+)*$
+    AllowedPattern: ^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, periods (.), hyphens (-), and forward slash (/). It cannot start or end
+      uppercase letters, hyphens (-), and forward slash (/). It cannot start or end
       with forward slash (/) because they are automatically appended.
-    Default: latest
-    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
-      can include numbers, lowercase letters, uppercase letters, periods (.), hyphens (-), and
-      forward slash (/). It cannot start or end with forward slash (/) because they
-      are automatically appended.
-    Type: String
+    Default: trendmicro/deepsecurity/latest
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can
+      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash
+      (/).
 Mappings:
-  AWSInfoRegionMap:
-      ap-northeast-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      ap-northeast-2:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      ap-south-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      ap-southeast-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      ap-southeast-2:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      ca-central-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      eu-central-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      eu-west-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      eu-west-2:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      sa-east-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      us-east-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      us-east-2:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      us-gov-west-1:
-        Partition: aws-us-gov
-        QuickStartS3URL: https://s3-us-gov-west-1.amazonaws.com
-      us-west-1:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
-      us-west-2:
-        Partition: aws
-        QuickStartS3URL: https://s3.amazonaws.com
   DSMSIZE:
     us-east-1:
       '1': m4.large
@@ -352,14 +303,13 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Condition: PerHostSupportedRegion
     Properties:
-      TemplateURL:
-        !Sub
-        - ${QuickStartS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}/templates/marketplace/MasterMP.template
-        - QuickStartS3URL:
-            !FindInMap
-            - AWSInfoRegionMap
-            - !Ref AWS::Region
-            - QuickStartS3URL
+      TemplateURL: !Sub
+        - >-
+          https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/marketplace/MasterMP.template
+        - QSS3Region: !If
+            - GovCloudCondition
+            - s3-us-gov-west-1
+            - s3
       Parameters:
         AWSIKeyPairName: !Ref AWSKeyPairName
         AWSIVPC: !Ref AWSVPC
@@ -399,19 +349,16 @@ Resources:
         DBISubnet2: !Ref DatabaseSubnet2
         DSIPLicense: PerHost
         DBPMultiAZ: 'true'
-        CfnUrlPrefix:
-          !Sub
-          - ${QuickStartS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}/
-          - QuickStartS3URL:
-              !FindInMap
-              - AWSInfoRegionMap
-              - !Ref AWS::Region
-              - QuickStartS3URL
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
 Conditions:
   PerHostSupportedRegion: !Not
     - !Equals
       - !Ref 'AWS::Region'
       - us-gov-west-1
+  GovCloudCondition: !Equals
+    - !Ref 'AWS::Region'
+    - us-gov-west-1
 Outputs:
   DeepSecurityConsole:
     Value: !GetAtt 

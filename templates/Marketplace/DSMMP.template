@@ -4,7 +4,7 @@ Description: >-
   nested in a stack, and requires several passed parameters to launch.
   **WARNING** This template creates Amazon EC2 instances and related resources.
   You will be billed for the AWS resources used if you create a stack from this
-  template.
+  template (qs-1ngr590jo).
 Parameters:
   AWSIKeyPairName:
     Description: >-
@@ -187,9 +187,25 @@ Parameters:
       - Internet-facing
       - Internal
     Default: Internet-facing
-  CfnUrlPrefix:
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters,
+      uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: quickstart-reference
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
     Type: String
-    Default: 'https://s3.amazonaws.com/trend-micro-quick-start/latest/'
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/). It cannot start or end
+      with forward slash (/) because they are automatically appended.
+    Default: trendmicro/deepsecurity/latest
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can
+      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash
+      (/).
+    Type: String
   DSCLicenseType:
     Type: String
     Default: Enterprise
@@ -580,24 +596,33 @@ Resources:
         addCloudAccount:
           files:
             /etc/cfn/set-aia-settings.sh:
-              source: !Join 
-                - ''
-                - - !Ref CfnUrlPrefix
-                  - scripts/set-aia-settings.sh
+              source: !Sub
+                - >-
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/set-aia-settings.sh
+                - QSS3Region: !If
+                    - GovCloudCondition
+                    - s3-us-gov-west-1
+                    - s3
               owner: root
               mode: '000700'
             /etc/cfn/kill-mp-web-installer.sh:
-              source: !Join 
-                - ''
-                - - !Ref CfnUrlPrefix
-                  - scripts/kill-mp-web-installer.sh
+              source: !Sub
+                - >-
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/kill-mp-web-installer.sh
+                - QSS3Region: !If
+                    - GovCloudCondition
+                    - s3-us-gov-west-1
+                    - s3
               owner: root
               mode: '000700'
             /etc/cfn/add-aws-account-with-instance-role.sh:
-              source: !Join 
-                - ''
-                - - !Ref CfnUrlPrefix
-                  - scripts/add-aws-account-with-instance-role.sh
+              source: !Sub
+                - >-
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/add-aws-account-with-instance-role.sh
+                - QSS3Region: !If
+                    - GovCloudCondition
+                    - s3-us-gov-west-1
+                    - s3
               owner: root
               mode: '000700'
           commands:
@@ -640,8 +665,14 @@ Resources:
               command: !Join 
                 - ''
                 - - 'cd /etc/cfn/rhel-scripts; curl -O '
-                  - !Ref CfnUrlPrefix
-                  - scripts/create-dsm-db.py; chmod 755 create-dsm-db.py
+                  - !Sub
+                    - >-
+                      https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/create-dsm-db.py
+                    - QSS3Region: !If
+                      - GovCloudCondition
+                      - s3-us-gov-west-1
+                      - s3
+                  - ' chmod 755 create-dsm-db.py'
               ignoreErrors: 'false'
             2-create-db:
               command: !Join 
@@ -670,17 +701,23 @@ Resources:
         fixManagerLoadBalancerSettings:
           files:
             /etc/cfn/create-console-listener.sh:
-              source: !Join 
-                - ''
-                - - !Ref CfnUrlPrefix
-                  - scripts/create-console-listener.sh
+              source: !Sub
+                - >-
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/create-console-listener.sh
+                - QSS3Region: !If
+                    - GovCloudCondition
+                    - s3-us-gov-west-1
+                    - s3
               owner: root
               mode: '000700'
             /etc/cfn/set-lb-settings.sh:
-              source: !Join 
-                - ''
-                - - !Ref CfnUrlPrefix
-                  - scripts/set-lb-settings.sh
+              source: !Sub
+                - >-
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/set-lb-settings.sh
+                - QSS3Region: !If
+                    - GovCloudCondition
+                    - s3-us-gov-west-1
+                    - s3
               owner: root
               mode: '000700'
           commands:
@@ -726,10 +763,13 @@ Resources:
         fixManagerHostObject:
           files:
             /etc/cfn/reactivate-manager.sh:
-              source: !Join 
-                - ''
-                - - !Ref CfnUrlPrefix
-                  - scripts/reactivate-manager.sh
+              source: !Sub
+                - >-
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/reactivate-manager.sh
+                - QSS3Region: !If
+                    - GovCloudCondition
+                    - s3-us-gov-west-1
+                    - s3
               owner: root
               mode: '000700'
           commands:
@@ -912,6 +952,9 @@ Conditions:
     - !Equals 
       - !Ref DSProxyUrl
       - ''
+  GovCloudCondition: !Equals
+    - !Ref 'AWS::Region'
+    - us-gov-west-1
 Outputs:
   DSMFQDN:
     Value: !GetAtt 
