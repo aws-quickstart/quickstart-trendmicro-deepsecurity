@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  v5.3: This template is an abstraction layer for choosing PostgreSQL, Oracle or
+  v5.4: This template is an abstraction layer for choosing PostgreSQL, Oracle or
   MSSQL when deploying Deep Security Manager (qs-1ngr590i4).
 Parameters:
   DBIRDSInstanceSize:
@@ -110,14 +110,13 @@ Parameters:
       It cannot start or end with a hyphen (-).
     Type: String
   QSS3KeyPrefix:
-    AllowedPattern: ^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slash (/). It cannot start or end
-      with forward slash (/) because they are automatically appended.
-    Default: trendmicro/deepsecurity/latest
+      uppercase letters, hyphens (-), and forward slash (/).",
+    Default: trendmicro/deepsecurity/latest/
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can
-      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash
-      (/).
+      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward
+      slash (/).
     Type: String
 Resources:
   DSOracleRDS:
@@ -125,12 +124,12 @@ Resources:
     Condition: DBTypeIsOracle
     Properties:
       TemplateURL: !Sub
-              - >-
-                https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/DSDBOracleRDS.template
-              - QSS3Region: !If
-                  - GovCloudCondition
-                  - s3-us-gov-west-1
-                  - s3
+        - >-
+          https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/ds-db-oracle-rds.template
+        - QSS3Region: !If
+          - GovCloudCondition
+          - s3-us-gov-west-1
+          - s3
       TimeoutInMinutes: '10'
       Parameters:
         DBIRDSInstanceSize: !Ref DBIRDSInstanceSize
@@ -147,12 +146,12 @@ Resources:
     Condition: DBTypeIsSQL
     Properties:
       TemplateURL: !Sub
-              - >-
-                https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/DSDBSQLRDS.template
-              - QSS3Region: !If
-                  - GovCloudCondition
-                  - s3-us-gov-west-1
-                  - s3
+        - >-
+          https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/ds-db-mssql-rds.template
+        - QSS3Region: !If
+          - GovCloudCondition
+          - s3-us-gov-west-1
+          - s3
       TimeoutInMinutes: '10'
       Parameters:
         DBIRDSInstanceSize: !Ref DBIRDSInstanceSize
@@ -169,12 +168,12 @@ Resources:
     Condition: DBTypeIsPostgreSQL
     Properties:
       TemplateURL: !Sub
-              - >-
-                https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/DSDBPostgreSQL.template
-              - QSS3Region: !If
-                  - GovCloudCondition
-                  - s3-us-gov-west-1
-                  - s3
+        - >-
+          https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/ds-db-postgresql-rds.template
+        - QSS3Region: !If
+          - GovCloudCondition
+          - s3-us-gov-west-1
+          - s3
       TimeoutInMinutes: '10'
       Parameters:
         DBIRDSInstanceSize: !Ref DBIRDSInstanceSize

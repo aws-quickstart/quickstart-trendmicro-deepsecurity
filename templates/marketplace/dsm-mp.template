@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  v5.3: Deploys Deep Security Manager to AWS. This template is designed to be
+  v5.4: Deploys Deep Security Manager to AWS. This template is designed to be
   nested in a stack, and requires several passed parameters to launch.
   **WARNING** This template creates Amazon EC2 instances and related resources.
   You will be billed for the AWS resources used if you create a stack from this
@@ -197,14 +197,13 @@ Parameters:
       It cannot start or end with a hyphen (-).
     Type: String
   QSS3KeyPrefix:
-    AllowedPattern: ^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slash (/). It cannot start or end
-      with forward slash (/) because they are automatically appended.
-    Default: trendmicro/deepsecurity/latest
+      uppercase letters, hyphens (-), and forward slash (/).",
+    Default: trendmicro/deepsecurity/latest/
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can
-      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash
-      (/).
+      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward
+      slash (/).
     Type: String
   DSCLicenseType:
     Type: String
@@ -598,7 +597,7 @@ Resources:
             /etc/cfn/set-aia-settings.sh:
               source: !Sub
                 - >-
-                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/set-aia-settings.sh
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/set-aia-settings.sh
                 - QSS3Region: !If
                     - GovCloudCondition
                     - s3-us-gov-west-1
@@ -608,7 +607,7 @@ Resources:
             /etc/cfn/kill-mp-web-installer.sh:
               source: !Sub
                 - >-
-                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/kill-mp-web-installer.sh
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/kill-mp-web-installer.sh
                 - QSS3Region: !If
                     - GovCloudCondition
                     - s3-us-gov-west-1
@@ -618,7 +617,7 @@ Resources:
             /etc/cfn/add-aws-account-with-instance-role.sh:
               source: !Sub
                 - >-
-                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/add-aws-account-with-instance-role.sh
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/add-aws-account-with-instance-role.sh
                 - QSS3Region: !If
                     - GovCloudCondition
                     - s3-us-gov-west-1
@@ -667,12 +666,12 @@ Resources:
                 - - 'cd /etc/cfn/rhel-scripts; curl -O '
                   - !Sub
                     - >-
-                      https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/create-dsm-db.py
+                      https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-dsm-db.py
                     - QSS3Region: !If
                       - GovCloudCondition
                       - s3-us-gov-west-1
                       - s3
-                  - ' chmod 755 create-dsm-db.py'
+                  - '; chmod 755 create-dsm-db.py'
               ignoreErrors: 'false'
             2-create-db:
               command: !Join 
@@ -703,7 +702,7 @@ Resources:
             /etc/cfn/create-console-listener.sh:
               source: !Sub
                 - >-
-                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/create-console-listener.sh
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-console-listener.sh
                 - QSS3Region: !If
                     - GovCloudCondition
                     - s3-us-gov-west-1
@@ -713,7 +712,7 @@ Resources:
             /etc/cfn/set-lb-settings.sh:
               source: !Sub
                 - >-
-                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/set-lb-settings.sh
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/set-lb-settings.sh
                 - QSS3Region: !If
                     - GovCloudCondition
                     - s3-us-gov-west-1
@@ -765,7 +764,7 @@ Resources:
             /etc/cfn/reactivate-manager.sh:
               source: !Sub
                 - >-
-                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/scripts/reactivate-manager.sh
+                  https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/reactivate-manager.sh
                 - QSS3Region: !If
                     - GovCloudCondition
                     - s3-us-gov-west-1

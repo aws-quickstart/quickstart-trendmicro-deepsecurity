@@ -1,14 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  v5.3: This template deploys a PostgreSQL RDS instance for Deep Security
-  Manager (qs-1ngr590ie).
+  v5.4: This template deploys an Oracle RDS instance for Deep Security Manager (qs-1ngr590i9).
 Parameters:
   DBIRDSInstanceSize:
     Default: db.m3.large
     Description: Trend Micro Deep Security Database instance class
     Type: String
     AllowedValues:
-      - db.m4.medium
       - db.m4.large
       - db.m4.xlarge
       - db.m4.2xlarge
@@ -16,19 +14,11 @@ Parameters:
       - db.m3.large
       - db.m3.xlarge
       - db.m3.2xlarge
-      - db.m2.xlarge
       - db.r3.large
       - db.r3.xlarge
       - db.r3.2xlarge
       - db.r3.4xlarge
       - db.r3.8xlarge
-      - db.m2.2xlarge
-      - db.m2.4xlarge
-      - db.m1.medium
-      - db.m1.large
-      - db.m1.xlarge
-      - db.m4.large
-      - db.m4.xlarge
     ConstraintDescription: must select a valid database instance type.
   DBIStorageAllocation:
     Default: 10
@@ -90,13 +80,15 @@ Resources:
   DSDatabase:
     Type: 'AWS::RDS::DBInstance'
     Properties:
-      LicenseModel: postgresql-license
+      LicenseModel: license-included
       PubliclyAccessible: false
       DBName: !Ref DBPName
       AllocatedStorage: !Ref DBIStorageAllocation
       DBInstanceClass: !Ref DBIRDSInstanceSize
-      Engine: postgres
-      EngineVersion: 9.6.1
+      Engine: !If 
+        - RegionIsUsGovCloud
+        - oracle-se1
+        - oracle-se2
       MasterUsername: !Ref DBICAdminName
       MasterUserPassword: !Ref DBICAdminPassword
       VPCSecurityGroups:
@@ -105,6 +97,7 @@ Resources:
       BackupRetentionPeriod: !Ref DBPBackupDays
       DBSubnetGroupName: !Ref DBISubnetGroupName
       StorageType: !Ref StorageType
+      StorageEncrypted: true
       Tags:
         - Key: Application
           Value: Deep Security Manager
