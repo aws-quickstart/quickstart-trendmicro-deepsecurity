@@ -1,32 +1,32 @@
+---
 AWSTemplateFormatVersion: 2010-09-09
-Description: >-
-  QS(0011) - v5.4: Quick Start that deploys Trend Micro Deep Security into an existing VPC
-  with a Multi-AZ PostgreSQL RDS instance  **WARNING** This template uses images
-  from the AWS Marketplace and an active subscription is required - Please see
-  the Quick Start documentation for more details. You will be billed for the AWS
-  resources used if you create a stack from this template (qs-1ngr590k4).
+Description: 'QS(0011) - v5.4: Quick Start that deploys Trend Micro Deep Security
+  into an existing VPC with a Multi-AZ PostgreSQL RDS instance  **WARNING** This template
+  uses images from the AWS Marketplace and an active subscription is required - Please
+  see the Quick Start documentation for more details. You will be billed for the AWS
+  resources used if you create a stack from this template (qs-1ngr590k4).'
 Metadata:
-  'AWS::CloudFormation::Interface':
+  AWS::CloudFormation::Interface:
     ParameterGroups:
-      - Label:
-          default: Deep Security Manager Configuration
-        Parameters:
-          - DeepSecurityAdminName
-          - DeepSecurityAdminPass
-          - AWSKeyPairName
-          - ProtectedInstances
-      - Label:
-          default: Network Configuration
-        Parameters:
-          - AWSVPC
-          - DeepSecuritySubnet
-          - DatabaseSubnet1
-          - DatabaseSubnet2
-      - Label:
-          default: AWS Quick Start Configuration
-        Parameters:
-         - QSS3BucketName
-         - QSS3KeyPrefix
+    - Label:
+        default: Deep Security Manager Configuration
+      Parameters:
+      - DeepSecurityAdminName
+      - DeepSecurityAdminPass
+      - AWSKeyPairName
+      - ProtectedInstances
+    - Label:
+        default: Network Configuration
+      Parameters:
+      - AWSVPC
+      - DeepSecuritySubnet
+      - DatabaseSubnet1
+      - DatabaseSubnet2
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3KeyPrefix
     ParameterLabels:
       AWSKeyPairName:
         default: EC2 Key Pair for SSH access
@@ -50,79 +50,72 @@ Metadata:
         default: Quick Start S3 Key Prefix
 Parameters:
   AWSKeyPairName:
-    Description: >-
-      Select an existing key pair to use for connecting to your Deep Security
+    Description: Select an existing key pair to use for connecting to your Deep Security
       Manager Instance.
-    Type: 'AWS::EC2::KeyPair::KeyName'
+    Type: AWS::EC2::KeyPair::KeyName
     MinLength: '1'
     MaxLength: '255'
     ConstraintDescription: Select an existing EC2 Key Pair.
   AWSVPC:
     Description: Select an existing VPC to deploy Deep Security Manager.
-    Type: 'AWS::EC2::VPC::Id'
+    Type: AWS::EC2::VPC::Id
     MinLength: '1'
     MaxLength: '255'
     AllowedPattern: '[-_a-zA-Z0-9]*'
   DatabaseSubnet1:
-    Description: >-
-      Select a private subnet for the RDS database.  Must be a private subnet
-      contained the in VPC chosen above.
-    Type: 'AWS::EC2::Subnet::Id'
-    ConstraintDescription: >-
-      RDS Subnet Groups must be comprised of 2 subnets in seperate availability
-      zones within the specified VPC for deploying this template
+    Description: Select a private subnet for the RDS database.  Must be a private
+      subnet contained the in VPC chosen above.
+    Type: AWS::EC2::Subnet::Id
+    ConstraintDescription: RDS Subnet Groups must be comprised of 2 subnets in seperate
+      availability zones within the specified VPC for deploying this template
   DatabaseSubnet2:
-    Description: >-
-      Select a second private subnet for the RDS database.  Must be a private
+    Description: Select a second private subnet for the RDS database.  Must be a private
       subnet contained the in VPC chosen above.
-    Type: 'AWS::EC2::Subnet::Id'
-    ConstraintDescription: >-
-      RDS Subnet Groups must be comprised of 2 subnets in seperate availability
-      zones within the specified VPC for deploying this template
+    Type: AWS::EC2::Subnet::Id
+    ConstraintDescription: RDS Subnet Groups must be comprised of 2 subnets in seperate
+      availability zones within the specified VPC for deploying this template
   DeepSecuritySubnet:
-    Description: >-
-      Select an existing Subnet for Deep Security Manager. Must be a public
+    Description: Select an existing Subnet for Deep Security Manager. Must be a public
       subnet contained the in VPC chosen above.
-    Type: 'AWS::EC2::Subnet::Id'
+    Type: AWS::EC2::Subnet::Id
     MinLength: '1'
     MaxLength: '255'
     AllowedPattern: '[-_a-zA-Z0-9]*'
     ConstraintDescription: Subnet ID must exist in the chosen VPC
   DeepSecurityAdminName:
     Default: MasterAdmin
-    Description: The Deep Security Manager administrator username for Web Console Access.
+    Description: The Deep Security Manager administrator username for Web Console
+      Access.
     Type: String
     MinLength: 1
     MaxLength: 16
     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
-    ConstraintDescription: >-
-      Must begin with a letter and contain only alphanumeric characters. Min
-      length 1, max length 16
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric
+      characters. Min length 1, max length 16
   DeepSecurityAdminPass:
     NoEcho: true
-    Description: >-
-      The Deep Security Manager administrator password. Must be 8-41 characters
-      long and can only contain alphanumeric characters or the following special
-      characters !^*-_+
+    Description: The Deep Security Manager administrator password. Must be 8-41 characters
+      long and can only contain alphanumeric characters or the following special characters
+      !^*-_+
     Type: String
     MinLength: 8
     MaxLength: 41
     AllowedPattern: '[a-zA-Z0-9!^*\-_+]*'
-    ConstraintDescription: >-
-      Can only contain alphanumeric characters or the following special
-      characters !^*-_+ Min length 8, max length 41
+    ConstraintDescription: Can only contain alphanumeric characters or the following
+      special characters !^*-_+ Min length 8, max length 41
   ProtectedInstances:
     Description: Select how many instances would you like to protect.
     Type: String
     AllowedValues:
-      - 1-100
-      - 101-500
-      - 501-1000
-      - 1001-2000
+    - 1-100
+    - 101-500
+    - 501-1000
+    - 1001-2000
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters,
-      uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
     Default: quickstart-reference
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
@@ -133,9 +126,9 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/).",
     Default: trendmicro/deepsecurity/latest/
-    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can
-      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward
-      slash (/).
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
     Type: String
 Mappings:
   DSMSIZE:
@@ -300,13 +293,14 @@ Mappings:
       Size: '4'
 Resources:
   MasterMP:
-    Type: 'AWS::CloudFormation::Stack'
+    Type: AWS::CloudFormation::Stack
     Condition: PerHostSupportedRegion
     Properties:
-      TemplateURL: !Sub
-        - >-
-          https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/marketplace/master-mp.template
-        - QSS3Region: !If
+      TemplateURL:
+        !Sub
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/marketplace/master-mp.template
+        - QSS3Region:
+            !If
             - GovCloudCondition
             - s3-us-gov-west-1
             - s3
@@ -314,14 +308,16 @@ Resources:
         AWSIKeyPairName: !Ref AWSKeyPairName
         AWSIVPC: !Ref AWSVPC
         DSISubnetID: !Ref DeepSecuritySubnet
-        DBIRDSInstanceSize: !FindInMap 
+        DBIRDSInstanceSize:
+          !FindInMap
           - RDSInstanceSize
-          - !Ref 'AWS::Region'
-          - !FindInMap 
+          - !Ref AWS::Region
+          - !FindInMap
             - DeploymentSize
             - !Ref ProtectedInstances
             - Size
-        DBIStorageAllocation: !FindInMap 
+        DBIStorageAllocation:
+          !FindInMap
           - RDSStorageSize
           - !Ref ProtectedInstances
           - Size
@@ -338,10 +334,11 @@ Resources:
         DSIPLicenseKey: XX-XXXX-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
         DSIPHeartbeatPort: '4120'
         DSIPGUIPort: '443'
-        DSIPInstanceType: !FindInMap 
+        DSIPInstanceType:
+          !FindInMap
           - DSMSIZE
-          - !Ref 'AWS::Region'
-          - !FindInMap 
+          - !Ref AWS::Region
+          - !FindInMap
             - DeploymentSize
             - !Ref ProtectedInstances
             - Size
@@ -352,15 +349,19 @@ Resources:
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
 Conditions:
-  PerHostSupportedRegion: !Not
+  PerHostSupportedRegion:
+    !Not
     - !Equals
-      - !Ref 'AWS::Region'
+      - !Ref AWS::Region
       - us-gov-west-1
-  GovCloudCondition: !Equals
-    - !Ref 'AWS::Region'
+  GovCloudCondition:
+    !Equals
+    - !Ref AWS::Region
     - us-gov-west-1
 Outputs:
   DeepSecurityConsole:
-    Value: !GetAtt 
+    Value:
+      !GetAtt
       - MasterMP
       - Outputs.DeepSecurityConsole
+...

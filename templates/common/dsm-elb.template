@@ -1,17 +1,16 @@
+---
 AWSTemplateFormatVersion: 2010-09-09
-Description: >-
-  v5.4: Deploys Elastic Load Balancers and Security Groups for Deep Security (qs-1ngr590je).
-  Manager.
+Description: 'v5.4: Deploys Elastic Load Balancers and Security Groups for Deep Security
+  (qs-1ngr590je). Manager.'
 Parameters:
   AWSIVPC:
     Description: Existing VPC to deploy Deep Security Manager
-    Type: 'AWS::EC2::VPC::Id'
+    Type: AWS::EC2::VPC::Id
     MinLength: '1'
     MaxLength: '255'
     AllowedPattern: '[-_a-zA-Z0-9]*'
   DSIPHeartbeatPort:
-    Description: >-
-      The heartbeat port used by Deep Security Agents and appliances to
+    Description: The heartbeat port used by Deep Security Agents and appliances to
       communicate with the Deep Security Manager.
     Type: Number
     MinValue: 0
@@ -26,8 +25,7 @@ Parameters:
     Default: '4119'
     ConstraintDescription: Must be a valid TCP port.
   DSISubnetID:
-    Description: >-
-      Existing Subnet for Deep Security Manager. Must be a public subnet
+    Description: Existing Subnet for Deep Security Manager. Must be a public subnet
       contained the in VPC chosen above.
     Type: String
     MinLength: '1'
@@ -38,13 +36,14 @@ Parameters:
     Description: Use internal or internet-facing ELB
     Type: String
     AllowedValues:
-      - Internet-facing
-      - Internal
+    - Internet-facing
+    - Internal
     Default: Internet-facing
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters,
-      uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
     Default: quickstart-reference
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
@@ -55,18 +54,19 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/).",
     Default: trendmicro/deepsecurity/latest/
-    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can
-      include numbers, lowercase letters, uppercase letters, hyphens (-), and forward
-      slash (/).
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
     Type: String
 Resources:
   ELBSG:
-    Type: 'AWS::CloudFormation::Stack'
+    Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub
-        - >-
-          https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/security-groups/ds-elb-sg.template
-        - QSS3Region: !If
+      TemplateURL:
+        !Sub
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/security-groups/ds-elb-sg.template
+        - QSS3Region:
+            !If
             - GovCloudCondition
             - s3-us-gov-west-1
             - s3
@@ -75,28 +75,30 @@ Resources:
         DSIPGUIPort: !Ref DSIPGUIPort
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
   DSMELB:
-    Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
     DependsOn: ELBSG
     Properties:
       Subnets:
-        - !Ref DSISubnetID
+      - !Ref DSISubnetID
       SecurityGroups:
-        - !GetAtt 
-          - ELBSG
-          - Outputs.ELBSG
-      Scheme: !If 
+      - !GetAtt
+        - ELBSG
+        - Outputs.ELBSG
+      Scheme:
+        !If
         - InternetFacingELB
         - internet-facing
         - internal
       Listeners:
-        - LoadBalancerPort: !Ref DSIPHeartbeatPort
-          InstancePort: !Ref DSIPHeartbeatPort
-          Protocol: TCP
-        - LoadBalancerPort: '4122'
-          InstancePort: '4122'
-          Protocol: TCP
+      - LoadBalancerPort: !Ref DSIPHeartbeatPort
+        InstancePort: !Ref DSIPHeartbeatPort
+        Protocol: TCP
+      - LoadBalancerPort: '4122'
+        InstancePort: '4122'
+        Protocol: TCP
       HealthCheck:
-        Target: !Join 
+        Target:
+          !Join
           - ''
           - - 'HTTPS:'
             - !Ref DSIPGUIPort
@@ -108,32 +110,40 @@ Resources:
       ConnectionSettings:
         IdleTimeout: 600
 Conditions:
-  InternetFacingELB: !Equals 
+  InternetFacingELB:
+    !Equals
     - !Ref DSELBPosture
     - Internet-facing
-  GovCloudCondition: !Equals
-      - !Ref 'AWS::Region'
-      - us-gov-west-1
+  GovCloudCondition:
+    !Equals
+    - !Ref AWS::Region
+    - us-gov-west-1
 Outputs:
   ELBFQDN:
-    Value: !GetAtt 
+    Value:
+      !GetAtt
       - DSMELB
       - DNSName
   ELBSourceSecurityGroup:
-    Value: !GetAtt 
+    Value:
+      !GetAtt
       - ELBSG
       - Outputs.ELBSG
   ELSBSourceSecurityGroupOnwerID:
-    Value: !GetAtt 
+    Value:
+      !GetAtt
       - DSMELB
       - SourceSecurityGroup.OwnerAlias
   DSIELB:
     Value: !Ref DSMELB
   ELBCanonicalHostedZoneNameID:
-    Value: !GetAtt 
+    Value:
+      !GetAtt
       - DSMELB
       - CanonicalHostedZoneNameID
   ELBDNSName:
-    Value: !GetAtt 
+    Value:
+      !GetAtt
       - DSMELB
       - DNSName
+...

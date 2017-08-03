@@ -1,16 +1,16 @@
+---
 AWSTemplateFormatVersion: 2010-09-09
-Description: >-
-  v5.4: This template creates the ingress rules for Deep Security Managers (qs-1ngr590j4).
+Description: 'v5.4: This template creates the ingress rules for Deep Security Managers
+  (qs-1ngr590j4).'
 Parameters:
   DSMSG:
     Description: Deep Security Manager Security Group
-    Type: 'AWS::EC2::SecurityGroup::Id'
+    Type: AWS::EC2::SecurityGroup::Id
   ELBSourceSG:
     Description: Source Security Group for inbound from ELB
     Type: String
   DSIPHeartbeatPort:
-    Description: >-
-      The heartbeat port used by Deep Security Agents and appliances to
+    Description: The heartbeat port used by Deep Security Agents and appliances to
       communicate with the Deep Security Manager.
     Type: Number
     MinValue: 0
@@ -26,7 +26,7 @@ Parameters:
     ConstraintDescription: Must be a valid TCP port.
 Resources:
   DSMConsoleIngressFromELB:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -34,7 +34,7 @@ Resources:
       ToPort: !Ref DSIPGUIPort
       SourceSecurityGroupId: !Ref ELBSourceSG
   DSMHeartbeatIngressFromELB:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -42,7 +42,7 @@ Resources:
       ToPort: !Ref DSIPHeartbeatPort
       SourceSecurityGroupId: !Ref ELBSourceSG
   DSMRelayIngressFromELB:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -50,7 +50,7 @@ Resources:
       ToPort: '4122'
       SourceSecurityGroupId: !Ref ELBSourceSG
   DSMAgentIngress:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -58,7 +58,7 @@ Resources:
       ToPort: '4118'
       SourceSecurityGroupId: !Ref DSMSG
   DSMConsoleIngressSelf:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -66,7 +66,7 @@ Resources:
       ToPort: !Ref DSIPGUIPort
       SourceSecurityGroupId: !Ref DSMSG
   DSMHeartbeatIngressSelf:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -74,7 +74,7 @@ Resources:
       ToPort: !Ref DSIPHeartbeatPort
       SourceSecurityGroupId: !Ref DSMSG
   DSMRelayIngressSelf:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -82,7 +82,7 @@ Resources:
       ToPort: '4122'
       SourceSecurityGroupId: !Ref DSMSG
   DSMConsoleIngress1921918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -90,7 +90,7 @@ Resources:
       ToPort: !Ref DSIPGUIPort
       CidrIp: 192.168.0.0/16
   DSMHeartbeatIngress1921918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -98,7 +98,7 @@ Resources:
       ToPort: !Ref DSIPHeartbeatPort
       CidrIp: 192.168.0.0/16
   DSMRelayIngress1921918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -106,7 +106,7 @@ Resources:
       ToPort: '4122'
       CidrIp: 192.168.0.0/16
   DSMConsoleIngress101918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -114,7 +114,7 @@ Resources:
       ToPort: !Ref DSIPGUIPort
       CidrIp: 10.0.0.0/8
   DSMHeartbeatIngress101918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -122,7 +122,7 @@ Resources:
       ToPort: !Ref DSIPHeartbeatPort
       CidrIp: 10.0.0.0/8
   DSMRelayIngress101918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -130,7 +130,7 @@ Resources:
       ToPort: '4122'
       CidrIp: 10.0.0.0/8
   DSMConsoleIngress1721918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -138,7 +138,7 @@ Resources:
       ToPort: !Ref DSIPGUIPort
       CidrIp: 172.16.0.0/12
   DSMHeartbeatIngress1721918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -146,7 +146,7 @@ Resources:
       ToPort: !Ref DSIPHeartbeatPort
       CidrIp: 172.16.0.0/12
   DSMRelayIngress1721918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: tcp
@@ -154,7 +154,7 @@ Resources:
       ToPort: '4122'
       CidrIp: 172.16.0.0/12
   DSMDNS1721918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: udp
@@ -162,7 +162,7 @@ Resources:
       ToPort: '53'
       CidrIp: 172.16.0.0/12
   DSMDNS101918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: udp
@@ -170,10 +170,11 @@ Resources:
       ToPort: '53'
       CidrIp: 10.0.0.0/8
   DSMDNS1921918:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DSMSG
       IpProtocol: udp
       FromPort: '53'
       ToPort: '53'
       CidrIp: 192.168.0.0/16
+...
