@@ -363,7 +363,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/marketplace/dsm-mp.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
             - GovCloudCondition
@@ -417,7 +417,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/marketplace/dsm-mp.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
             - GovCloudCondition
@@ -464,7 +464,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/marketplace/dsm-mp.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
             - GovCloudCondition
@@ -512,7 +512,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/marketplace/dsm-mp.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
             - GovCloudCondition
@@ -555,7 +555,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/db/ds-db-abstract.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/db/ds-db-abstract.template
         - QSS3Region:
             !If
             - GovCloudCondition
@@ -585,7 +585,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/security-groups/rds-security-group.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/rds-security-group.template
         - QSS3Region:
             !If
             - GovCloudCondition
@@ -618,7 +618,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/dsm-elb.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/dsm-elb.template
         - QSS3Region:
             !If
             - GovCloudCondition
@@ -637,7 +637,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/common/security-groups/dsm-sg-ingress-rules.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/dsm-sg-ingress-rules.template
         - QSS3Region:
             !If
             - GovCloudCondition
