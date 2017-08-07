@@ -322,6 +322,20 @@ Resources:
         - !Ref AWS::NoValue
       Path: /
       Policies:
+      - PolicyName: aws-quick-start-s3-policy
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Action:
+            - s3:GetObject
+            Resource:
+              Fn::Sub:
+              - arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*
+              - Partition:
+                  Fn::If:
+                  - GovCloudCondition
+                  - aws-us-gov
+                  - aws
       - !If
         - AddToELB
         - PolicyName: DeepSecurityManagerInstancePolicy
@@ -403,6 +417,13 @@ Resources:
   DSM:
     Type: AWS::EC2::Instance
     Metadata:
+      AWS::CloudFormation::Authentication:
+        S3AcccessCreds:
+          type: S3
+          roleName:
+            Fn::Ref: DSMRole
+          buckets:
+            Fn::Ref: QSS3BucketName
       AWS::CloudFormation::Init:
         configSets:
           default:
@@ -633,6 +654,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
+              authentication: S3AcccessCreds
             /etc/cfn/kill-mp-web-installer.sh:
               source:
                 !Sub
@@ -644,6 +666,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
+              authentication: S3AcccessCreds
             /etc/cfn/add-aws-account-with-instance-role.sh:
               source:
                 !Sub
@@ -655,6 +678,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
+              authentication: S3AcccessCreds
           commands:
             5-check-service:
               command:
@@ -692,22 +716,21 @@ Resources:
             10-killWebInstaller:
               command: /etc/cfn/kill-mp-web-installer.sh
         sqlSetup:
+          files:
+            /etc/cfn/rhel-scripts/create-dsm-db.py:
+              source:
+                !Sub
+                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-dsm-db.py
+                - QSS3Region:
+                    !If
+                    - GovCloudCondition
+                    - s3-us-gov-west-1
+                    - s3
+              owner: root
+              mode: '000755'
+              authentication: S3AcccessCreds
           commands:
-            1-get-create-script:
-              command:
-                !Join
-                - ''
-                - - 'cd /etc/cfn/rhel-scripts; curl -O '
-                  - !Sub
-                    - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-dsm-db.py
-                    - QSS3Region:
-                        !If
-                        - GovCloudCondition
-                        - s3-us-gov-west-1
-                        - s3
-                  - ; chmod 755 create-dsm-db.py
-              ignoreErrors: 'false'
-            2-create-db:
+            1-create-db:
               command:
                 !Join
                 - ''
@@ -745,6 +768,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
+              authentication: S3AcccessCreds
             /etc/cfn/set-lb-settings.sh:
               source:
                 !Sub
@@ -756,6 +780,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
+              authentication: S3AcccessCreds
           commands:
             1-setup-elb-listener:
               command:
@@ -812,6 +837,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
+              authentication: S3AcccessCreds
           commands:
             1-reactivate-manager.sh:
               command:
