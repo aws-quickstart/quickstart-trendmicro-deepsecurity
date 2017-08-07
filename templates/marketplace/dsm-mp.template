@@ -421,9 +421,9 @@ Resources:
         S3AcccessCreds:
           type: S3
           roleName:
-            Fn::Ref: DSMRole
+            Ref: DSMRole
           buckets:
-            Fn::Ref: QSS3BucketName
+            Ref: QSS3BucketName
       AWS::CloudFormation::Init:
         configSets:
           default:
