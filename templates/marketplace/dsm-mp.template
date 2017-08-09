@@ -332,7 +332,7 @@ Resources:
               Fn::Sub:
               - arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*
               - Partition:
-                  Fn::If:
+                  !If
                   - GovCloudCondition
                   - aws-us-gov
                   - aws
@@ -420,10 +420,8 @@ Resources:
       AWS::CloudFormation::Authentication:
         S3AcccessCreds:
           type: S3
-          roleName:
-            Ref: DSMRole
-          buckets:
-            Ref: QSS3BucketName
+          roleName: !Ref DSMRole
+          buckets: !Ref QSS3BucketName
       AWS::CloudFormation::Init:
         configSets:
           default:
@@ -454,45 +452,20 @@ Resources:
           files:
             /etc/cfn/cfn-hup.conf:
               content:
-                !Join
-                - ''
-                - - '[main]
-
-                    '
-                  - stack=
-                  - !Ref AWS::StackId
-                  - '
-
-                    '
-                  - region=
-                  - !Ref AWS::Region
-                  - '
-
-                    '
+                Fn::Sub: |
+                  [main]
+                  stack=${AWS::StackId}
+                  region=${AWS::Region}
               mode: '000400'
               owner: root
               group: root
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
               content:
-                !Join
-                - ''
-                - - '[cfn-auto-reloader-hook]
-
-                    '
-                  - 'triggers=post.update
-
-                    '
-                  - 'path=Resources.DSM.Metadata.AWS::CloudFormation::Init
-
-                    '
-                  - 'action=/opt/aws/bin/cfn-init -v -c updateDSM --stack '
-                  - !Ref AWS::StackId
-                  - ' --resource DSM1'
-                  - ' --region '
-                  - !Ref AWS::Region
-                  - ' runas=root
-
-                    '
+                Fn::Sub: |
+                  [cfn-auto-reloader-hook]
+                  triggers=post.update
+                  path=Resources.DSM.Metadata.AWS::CloudFormation::Init
+                  action=/opt/aws/bin/cfn-init -v -c updateDSM --stack ${AWS::StackId} --resource DSM1 --region ${AWS::Region} runas=root
           services:
             sysvinit:
               cfn-hup:
@@ -505,135 +478,61 @@ Resources:
           files:
             /etc/cfn/dsmConfiguration.properties:
               content:
-                !Join
-                - ''
-                - - !If
+                Fn::Sub:
+                - |
+                  ${LicenseConfig}
+                  CredentialsScreen.Administrator.Username=${DSCAdminName}
+                  CredentialsScreen.Administrator.Password=${DSCAdminPassword}
+                  CredentialsScreen.UseStrongPasswords=False
+                  Dinstall4j.language=en
+                  DatabaseScreen.DatabaseType=${DBTypeConfig}
+                  DatabaseScreen.Hostname=${DBPRDSEndpoint}
+                  DatabaseScreen.DatabaseName=${DBPName}
+                  DatabaseScreen.Transport=TCP
+                  DatabaseScreen.Username=${DBICAdminName}
+                  DatabaseScreen.Password=${DBICAdminPassword}
+                  AddressAndPortsScreen.ManagerPort=${DSIPGUIPort}
+                  AddressAndPortsScreen.HeartbeatPort=${DSIPHeartbeatPort}
+                  ${NodeConfig}
+                  SecurityUpdateScreen.UpdateComponents=true
+                  SecurityUpdateScreen.UpdateSoftware=true
+                  SmartProtectionNetworkScreen.EnableFeedback=false
+                  SmartProtectionNetworkScreen.IndustryType=blank
+                  RelayScreen.Install=True
+                  RelayScreen.ProxyType=None
+                  RelayScreen.ProxyPort=None
+                  RelayScreen.Proxy=False
+                  RelayScreen.AntiMalware=True
+                  RelayScreen.ProxyAuthentication=False
+                  Override.Automation=True
+                - LicenseConfig:
+                    !If
                     - AddAcAnswer
                     - !If
                       - NetworkOnlyLicense
-                      - !Join
-                        - ''
-                        - - LicenseScreen.License.1=
-                          - !Ref DSIPLicenseKey
-                      - !Join
-                        - ''
-                        - - LicenseScreen.License.-1=
-                          - !Ref DSIPLicenseKey
-                    - '
-
-                      '
-                  - '
-
-                    '
-                  - CredentialsScreen.Administrator.Username=
-                  - !Ref DSCAdminName
-                  - '
-
-                    '
-                  - CredentialsScreen.Administrator.Password=
-                  - !Ref DSCAdminPassword
-                  - '
-
-                    '
-                  - 'CredentialsScreen.UseStrongPasswords=False
-
-                    '
-                  - 'Dinstall4j.language=en
-
-                    '
-                  - DatabaseScreen.DatabaseType=
-                  - !FindInMap
+                      - Fn::Sub: LicenseScreen.License.1=${DSIPLicenseKey}
+                      - Fn::Sub: LicenseScreen.License.-1=${DSIPLicenseKey}
+                    - ''
+                  DBTypeConfig:
+                    !FindInMap
                     - DSMDBMap
                     - !Ref DBPEngine
                     - DbTypeString
-                  - '
-
-                    '
-                  - DatabaseScreen.Hostname=
-                  - !Ref DBPRDSEndpoint
-                  - '
-
-                    '
-                  - DatabaseScreen.DatabaseName=
-                  - !Ref DBPName
-                  - '
-
-                    '
-                  - 'DatabaseScreen.Transport=TCP
-
-                    '
-                  - DatabaseScreen.Username=
-                  - !Ref DBICAdminName
-                  - '
-
-                    '
-                  - DatabaseScreen.Password=
-                  - !Ref DBICAdminPassword
-                  - '
-
-                    '
-                  - AddressAndPortsScreen.ManagerPort=
-                  - !Ref DSIPGUIPort
-                  - '
-
-                    '
-                  - AddressAndPortsScreen.HeartbeatPort=
-                  - !Ref DSIPHeartbeatPort
-                  - '
-
-                    '
-                  - !If
+                  NodeConfig:
+                    !If
                     - IsFirstNode
-                    - 'AddressAndPortsScreen.NewNode=false
-
-                      '
+                    - AddressAndPortsScreen.NewNode=false
                     - |
                       AddressAndPortsScreen.NewNode=true
                       UpgradeVerificationScreen.Overwrite=False
-                  - 'SecurityUpdateScreen.UpdateComponents=true
-
-                    '
-                  - 'SecurityUpdateScreen.UpdateSoftware=true
-
-                    '
-                  - 'SmartProtectionNetworkScreen.EnableFeedback=false
-
-                    '
-                  - 'SmartProtectionNetworkScreen.IndustryType=blank
-
-                    '
-                  - 'RelayScreen.Install=True
-
-                    '
-                  - 'RelayScreen.ProxyType=None
-
-                    '
-                  - 'RelayScreen.ProxyPort=None
-
-                    '
-                  - 'RelayScreen.Proxy=False
-
-                    '
-                  - 'RelayScreen.AntiMalware=True
-
-                    '
-                  - 'RelayScreen.ProxyAuthentication=False
-
-                    '
-                  - 'Override.Automation=True
-
-                    '
               owner: root
               mode: '000600'
         installDSM:
           commands:
             0-sethostnameinprops:
               command:
-                !Join
-                - ''
-                - - 'echo '
-                  - '"AddressAndPortsScreen.ManagerAddress=$(curl http://169.254.169.254/latest/meta-data/local-ipv4/)"
-                    >> /etc/cfn/dsmConfiguration.properties'
+                Fn::Sub: echo "AddressAndPortsScreen.ManagerAddress=$(curl http://169.254.169.254/latest/meta-data/local-ipv4/)"
+                  >> /etc/cfn/dsmConfiguration.properties
               ignoreErrors: 'false'
             1-install-DSM:
               command: cd /opt/trend/packages/dsm/default/; sh /opt/trend/packages/dsm/default/ManagerAWS.sh
@@ -645,7 +544,7 @@ Resources:
           files:
             /etc/cfn/set-aia-settings.sh:
               source:
-                !Sub
+                Fn::Sub:
                 - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/set-aia-settings.sh
                 - QSS3Region:
                     !If
@@ -657,7 +556,7 @@ Resources:
               authentication: S3AcccessCreds
             /etc/cfn/kill-mp-web-installer.sh:
               source:
-                !Sub
+                Fn::Sub:
                 - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/kill-mp-web-installer.sh
                 - QSS3Region:
                     !If
@@ -669,7 +568,7 @@ Resources:
               authentication: S3AcccessCreds
             /etc/cfn/add-aws-account-with-instance-role.sh:
               source:
-                !Sub
+                Fn::Sub:
                 - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/add-aws-account-with-instance-role.sh
                 - QSS3Region:
                     !If
@@ -682,36 +581,17 @@ Resources:
           commands:
             5-check-service:
               command:
-                !Join
-                - ''
-                - - 'until curl -vk https://127.0.0.1:'
-                  - !Ref DSIPGUIPort
-                  - /rest/status/manager/current/ping; do echo "manager not started
-                    yet" >> /tmp/4-check-service; service dsm_s start >> /tmp/4-check-service;
-                    sleep 30; done
+                Fn::Sub: until curl -vk https://127.0.0.1:${DSIPGUIPort}/rest/status/manager/current/ping;
+                  do echo "manager not started yet" >> /tmp/4-check-service; service
+                  dsm_s start >> /tmp/4-check-service;sleep 30; done
             7-set-aia-settings:
               command:
-                !Join
-                - ''
-                - - '/etc/cfn/set-aia-settings.sh '
-                  - !Ref DSCAdminName
-                  - ' '
-                  - !Ref DSCAdminPassword
-                  - ' - '
-                  - !Ref DSIPGUIPort
-                  - ' >> /tmp/set-aia-settings.log'
+                Fn::Sub: /etc/cfn/set-aia-settings.sh ${DSCAdminName} ${DSCAdminPassword}
+                  - ${DSIPGUIPort} >> /tmp/set-aia-settings.log
             8-addCloudAccount:
               command:
-                !Join
-                - ''
-                - - '/etc/cfn/add-aws-account-with-instance-role.sh '
-                  - !Ref DSCAdminName
-                  - ' '
-                  - !Ref DSCAdminPassword
-                  - ' localhost '
-                  - !Ref DSIPGUIPort
-                  - ' '
-                  - !Ref AWS::Region
+                Fn::Sub: /etc/cfn/add-aws-account-with-instance-role.sh ${DSCAdminName}
+                  ${DSCAdminPassword} localhost ${DSIPGUIPort} ${AWS::Region}
               ignoreErrors: 'False'
             10-killWebInstaller:
               command: /etc/cfn/kill-mp-web-installer.sh
@@ -719,7 +599,7 @@ Resources:
           files:
             /etc/cfn/rhel-scripts/create-dsm-db.py:
               source:
-                !Sub
+                Fn::Sub:
                 - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-dsm-db.py
                 - QSS3Region:
                     !If
@@ -732,34 +612,23 @@ Resources:
           commands:
             1-create-db:
               command:
-                !Join
-                - ''
-                - - 'cd /etc/cfn/rhel-scripts; python create-dsm-db.py --user '
-                  - !Ref DBICAdminName
-                  - ' --pass '
-                  - !Ref DBICAdminPassword
-                  - ' --endpoint '
-                  - !Ref DBPRDSEndpoint
-                  - ' --dbname '
-                  - !Ref DBPName
+                Fn::Sub: cd /etc/cfn/rhel-scripts; python create-dsm-db.py --user
+                  ${DBICAdminName} --pass ${DBICAdminPassword} --endpoint ${DBPRDSEndpoint}
+                  --dbname ${DBPName}
               ignoreErrors: 'false'
         addToELB:
           commands:
             0-add-instance-to-elb:
               command:
-                !Join
-                - ''
-                - - 'aws elb register-instances-with-load-balancer --load-balancer '
-                  - !Ref DSIELB
-                  - ' --instances $(curl http://169.254.169.254/latest/meta-data/instance-id/)
-                    --region '
-                  - !Ref AWS::Region
+                Fn::Sub: aws elb register-instances-with-load-balancer --load-balancer
+                  ${DSIELB} --instances $(curl http://169.254.169.254/latest/meta-data/instance-id/)
+                  --region ${AWS::Region}
               ignoreErrors: 'false'
         fixManagerLoadBalancerSettings:
           files:
             /etc/cfn/create-console-listener.sh:
               source:
-                !Sub
+                Fn::Sub:
                 - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-console-listener.sh
                 - QSS3Region:
                     !If
@@ -771,7 +640,7 @@ Resources:
               authentication: S3AcccessCreds
             /etc/cfn/set-lb-settings.sh:
               source:
-                !Sub
+                Fn::Sub:
                 - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/set-lb-settings.sh
                 - QSS3Region:
                     !If
@@ -784,51 +653,23 @@ Resources:
           commands:
             1-setup-elb-listener:
               command:
-                !Join
-                - ''
-                - - '/etc/cfn/create-console-listener.sh '
-                  - !Ref DSIELB
-                  - ' '
-                  - !Ref DSIELBFQDN
-                  - ' '
-                  - !Ref DSIPGUIPort
-                  - ' '
-                  - !Ref AWS::StackName
-                  - ' '
-                  - '1 '
-                  - !Ref AWS::Region
-                  - ' >> /tmp/listener.log'
+                Fn::Sub: /etc/cfn/create-console-listener.sh ${DSIELB} ${DSIELBFQDN}
+                  ${DSIPGUIPort} ${AWS::StackName} 1 ${AWS::Region} >> /tmp/listener.log
             4-set-load-balancer-settings:
               command:
-                !Join
-                - ''
-                - - '/etc/cfn/set-lb-settings.sh '
-                  - !Ref DSCAdminName
-                  - ' '
-                  - !Ref DSCAdminPassword
-                  - ' '
-                  - !Ref DSIELBFQDN
-                  - ' '
-                  - !Ref DSIPGUIPort
-                  - ' '
-                  - !Ref DSIPHeartbeatPort
-                  - ' >> /tmp/set-lb-settings.log'
+                Fn::Sub: /etc/cfn/set-lb-settings.sh ${DSCAdminName} ${DSCAdminPassword}
+                  ${DSIELBFQDN} ${DSIPGUIPort} ${DSIPHeartbeatPort} >> /tmp/set-lb-settings.log
         fixManagerLocalLoadBalancerHostsFile:
           commands:
             1-setHostsFileELB:
               command:
-                !Join
-                - ''
-                - - echo "
-                  - $(curl http://169.254.169.254/latest/meta-data/local-ipv4/)
-                  - ' '
-                  - !Ref DSIELBFQDN
-                  - '" >> /etc/hosts'
+                Fn::Sub: echo "$(curl http://169.254.169.254/latest/meta-data/local-ipv4/)
+                  ${DSIELBFQDN}" >> /etc/hosts
         fixManagerHostObject:
           files:
             /etc/cfn/reactivate-manager.sh:
               source:
-                !Sub
+                Fn::Sub:
                 - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/reactivate-manager.sh
                 - QSS3Region:
                     !If
@@ -841,14 +682,8 @@ Resources:
           commands:
             1-reactivate-manager.sh:
               command:
-                !Join
-                - ''
-                - - '/etc/cfn/reactivate-manager.sh >> /etc/cfn/reactivate-manager.log '
-                  - !Ref DSCAdminName
-                  - ' '
-                  - !Ref DSCAdminPassword
-                  - ' '
-                  - !Ref DSIPGUIPort
+                Fn::Sub: /etc/cfn/reactivate-manager.sh >> /etc/cfn/reactivate-manager.log
+                  ${DSCAdminName} ${DSCAdminPassword} ${DSIPGUIPort}
     Properties:
       IamInstanceProfile: !Ref DSMProfile
       ImageId:
@@ -880,48 +715,25 @@ Resources:
       KeyName: !Ref AWSIKeyPairName
       UserData:
         !Base64
-          Fn::Join:
-          - ''
-          - - '#!/bin/bash -xe
-
-              '
-            - '# cloud-init
-
-              '
-            - !If
+          Fn::Sub:
+          - |
+            #!/bin/bash -x
+            # cloud-init
+            ${ProxyConfig}
+            /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource DSM --region ${AWS::Region}${ConfigSetOption1}${ConfigSetOption2}${ProxyOption1}
+            /opt/aws/bin/cfn-signal ${CFNSignalOption}${ProxyOption2}
+          - ProxyConfig:
+              !If
               - UseProxy
-              - !Join
-                - ''
-                - - !Sub
-                    - 'export HTTPS_PROXY="https://${proxyUrl}"
-
-                      '
-                    - proxyUrl: !Ref DSProxyUrl
-                  - !Sub
-                    - 'export HTTP_PROXY="http://${proxyUrl}"
-
-                      '
-                    - proxyUrl: !Ref DSProxyUrl
-                  - 'export NO_PROXY="169.254.169.254,localhost,127.0.0.1"
-
-                    '
-                  - !Sub
-                    - 'echo -e "proxy=http://${proxyUrl}" >> /etc/yum.conf
-
-                      '
-                    - proxyUrl: !Ref DSProxyUrl
-                  - 'curl -ko /opt/trend/packages/dsm/default/Agent-amzn1-10.0.0-2240.x86_64.zip
-                    https://files.trendmicro.com/products/deepsecurity/en/10.0/Agent-amzn1-10.0.0-2240.x86_64.zip
-
-                    '
+              - Fn::Sub: |
+                  export HTTPS_PROXY="https://${DSProxyUrl}"
+                  export HTTP_PROXY="http://${DSProxyUrl}"
+                  export NO_PROXY="169.254.169.254,localhost,127.0.0.1"
+                  echo -e "proxy=http://${DSProxyUrl}" >> /etc/yum.conf
+                  curl -ko /opt/trend/packages/dsm/default/Agent-amzn1-10.0.0-2240.x86_64.zip https://files.trendmicro.com/products/deepsecurity/en/10.0/Agent-amzn1-10.0.0-2240.x86_64.zip
               - ''
-            - '/opt/aws/bin/cfn-init -v '
-            - ' --stack '
-            - !Ref AWS::StackName
-            - ' --resource DSM'
-            - ' --region '
-            - !Ref AWS::Region
-            - !If
+            ConfigSetOption1:
+              !If
               - SQLplusELB
               - ' -c doSqlSetup,default,setupLocalELB,setupGlobalELB'
               - !If
@@ -931,39 +743,33 @@ Resources:
                   - IsFirstNodePlusELB
                   - ' -c default,setupLocalELB,setupGlobalELB'
                   - ''
-            - !If
+            ConfigSetOption2:
+              !If
               - AddNodePlusELB
               - ' -c fixManagerLocalLbAddress,addDsmNode,setupLocalELB'
               - !If
                 - IsFirstNode
                 - ''
                 - ' -c addDsmNode'
-            - !If
+            ProxyOption1:
+              !If
               - UseProxy
-              - !Sub
-                - ' --https-proxy https://${proxyUrl}'
-                - proxyUrl: !Ref DSProxyUrl
+              - Fn::Sub: ' --https-proxy https://${DSProxyUrl}'
               - ''
-            - '
-
-              '
-            - !If
+            CFNSignalOption:
+              !If
               - WaitNotProvided
-              - /opt/aws/bin/cfn-signal -e $?  -r "Complete" ''
+              - -e $? -r "Complete"
               - !Join
                 - ''
-                - - '/opt/aws/bin/cfn-signal -e $? -r "DSM Node configuration complete" '
+                - - '-e $? -r "DSM Node configuration complete" '
                   - !Base64
                       Ref: DSM1CompleteWaitHandle
-            - !If
+            ProxyOption2:
+              !If
               - UseProxy
-              - !Sub
-                - ' --https-proxy https://${proxyUrl}'
-                - proxyUrl: !Ref DSProxyUrl
+              - Fn::Sub: ' --https-proxy https://${DSProxyUrl}'
               - ''
-            - '
-
-              '
 Conditions:
   DBTypeIsOracle:
     !Equals
@@ -1055,20 +861,10 @@ Conditions:
     - us-gov-west-1
 Outputs:
   DSMFQDN:
-    Value:
-      !GetAtt
-      - DSM
-      - PublicDnsName
+    Value: !GetAtt DSM.PublicDnsName
   DSMURL:
     Value:
-      !Join
-      - ''
-      - - https://
-        - !GetAtt
-          - DSM
-          - PublicDnsName
-        - ':'
-        - !Ref DSIPGUIPort
+      Fn::Sub: https://${DSM.PublicDnsName}:${DSIPGUIPort}
   DSMInstanceId:
     Value: !Ref DSM
 ...
