@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'v5.4: This template deploys a PostgreSQL RDS instance for Deep Security
-  Manager (qs-1ngr590ie).'
+  Manager. (qs-1ngr590ie)'
 Parameters:
   DBIRDSInstanceSize:
     Default: db.m3.large
@@ -121,14 +121,8 @@ Conditions:
 Outputs:
   DSDBEndpoint:
     Description: Endpoint to be passed to DSM installation properties file
-    Value:
-      !GetAtt
-      - DSDatabase
-      - Endpoint.Address
+    Value: !GetAtt DSDatabase.Endpoint.Address
   DSDBPort:
     Description: Port to be passed to DSM installation properties file
-    Value:
-      !GetAtt
-      - DSDatabase
-      - Endpoint.Port
+    Value: !GetAtt DSDatabase.Endpoint.Port
 ...

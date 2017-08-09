@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'v5.4: This template deploys an MSSQL RDS Instance for Deep Security
-  Manager (qs-1ngr590ij).'
+  Manager. (qs-1ngr590ij)'
 Parameters:
   DBIRDSInstanceSize:
     Default: db.m3.large
@@ -109,14 +109,8 @@ Conditions:
 Outputs:
   DSDBEndpoint:
     Description: Endpoint to be passed to DSM installation properties file
-    Value:
-      !GetAtt
-      - DSDatabase
-      - Endpoint.Address
+    Value: !GetAtt DSDatabase.Endpoint.Address
   DSDBPort:
     Description: Port to be passed to DSM installation properties file
-    Value:
-      !GetAtt
-      - DSDatabase
-      - Endpoint.Port
+    Value: !GetAtt DSDatabase.Endpoint.Port
 ...

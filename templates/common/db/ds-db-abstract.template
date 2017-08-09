@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'v5.4: This template is an abstraction layer for choosing PostgreSQL,
-  Oracle or MSSQL when deploying Deep Security Manager (qs-1ngr590i4).'
+  Oracle or MSSQL when deploying Deep Security Manager. (qs-1ngr590i4)'
 Parameters:
   DBIRDSInstanceSize:
     Default: db.m3.large
@@ -122,7 +122,7 @@ Resources:
     Condition: DBTypeIsOracle
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/db/ds-db-oracle-rds.template
         - QSS3Region:
             !If
@@ -145,7 +145,7 @@ Resources:
     Condition: DBTypeIsSQL
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/db/ds-db-mssql-rds.template
         - QSS3Region:
             !If
@@ -168,7 +168,7 @@ Resources:
     Condition: DBTypeIsPostgreSQL
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/db/ds-db-postgresql-rds.template
         - QSS3Region:
             !If
@@ -215,30 +215,18 @@ Outputs:
     Value:
       !If
       - DBTypeIsOracle
-      - !GetAtt
-        - DSOracleRDS
-        - Outputs.DSDBEndpoint
+      - !GetAtt DSOracleRDS.Outputs.DSDBEndpoint
       - !If
         - DBTypeIsPostgreSQL
-        - !GetAtt
-          - DSPostgreSQLRDS
-          - Outputs.DSDBEndpoint
-        - !GetAtt
-          - DSSQLRDS
-          - Outputs.DSDBEndpoint
+        - !GetAtt DSPostgreSQLRDS.Outputs.DSDBEndpoint
+        - !GetAtt DSSQLRDS.Outputs.DSDBEndpoint
   DSDBPort:
     Value:
       !If
       - DBTypeIsOracle
-      - !GetAtt
-        - DSOracleRDS
-        - Outputs.DSDBPort
+      - !GetAtt DSOracleRDS.Outputs.DSDBPort
       - !If
         - DBTypeIsPostgreSQL
-        - !GetAtt
-          - DSPostgreSQLRDS
-          - Outputs.DSDBPort
-        - !GetAtt
-          - DSSQLRDS
-          - Outputs.DSDBPort
+        - !GetAtt DSPostgreSQLRDS.Outputs.DSDBPort
+        - !GetAtt DSSQLRDS.Outputs.DSDBPort
 ...

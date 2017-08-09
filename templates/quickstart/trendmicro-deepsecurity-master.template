@@ -4,7 +4,7 @@ Description: 'QS(0011) - v5.4: Quick Start that deploys Trend Micro Deep Securit
   into an existing VPC with a Multi-AZ PostgreSQL RDS instance  **WARNING** This template
   uses images from the AWS Marketplace and an active subscription is required - Please
   see the Quick Start documentation for more details. You will be billed for the AWS
-  resources used if you create a stack from this template (qs-1ngr590k4).'
+  resources used if you create a stack from this template. (qs-1ngr590k4)'
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -297,7 +297,7 @@ Resources:
     Condition: PerHostSupportedRegion
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/master-mp.template
         - QSS3Region:
             !If
@@ -360,8 +360,5 @@ Conditions:
     - us-gov-west-1
 Outputs:
   DeepSecurityConsole:
-    Value:
-      !GetAtt
-      - MasterMP
-      - Outputs.DeepSecurityConsole
+    Value: !GetAtt MasterMP.Outputs.DeepSecurityConsole
 ...

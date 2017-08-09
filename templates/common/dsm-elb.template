@@ -63,7 +63,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/ds-elb-sg.template
         - QSS3Region:
             !If
@@ -120,30 +120,15 @@ Conditions:
     - us-gov-west-1
 Outputs:
   ELBFQDN:
-    Value:
-      !GetAtt
-      - DSMELB
-      - DNSName
+    Value: !GetAtt DSMELB.DNSName
   ELBSourceSecurityGroup:
-    Value:
-      !GetAtt
-      - ELBSG
-      - Outputs.ELBSG
+    Value: !GetAtt ELBSG.Outputs.ELBSG
   ELSBSourceSecurityGroupOnwerID:
-    Value:
-      !GetAtt
-      - DSMELB
-      - SourceSecurityGroup.OwnerAlias
+    Value: !GetAtt DSMELB.SourceSecurityGroup.OwnerAlias
   DSIELB:
     Value: !Ref DSMELB
   ELBCanonicalHostedZoneNameID:
-    Value:
-      !GetAtt
-      - DSMELB
-      - CanonicalHostedZoneNameID
+    Value: !GetAtt DSMELB.CanonicalHostedZoneNameID
   ELBDNSName:
-    Value:
-      !GetAtt
-      - DSMELB
-      - DNSName
+    Value: !GetAtt DSMELB.DNSName
 ...

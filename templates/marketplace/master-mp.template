@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'v5.4: Trend Micro Deep Security Marketplace master template. For more
-  information see http://aws.trendmicro.com (qs-1ngr590jt).'
+  information see http://aws.trendmicro.com. (qs-1ngr590jt)'
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -376,8 +376,7 @@ Resources:
         DSIPLicenseKey: !Ref DSIPLicenseKey
         DSCAdminName: !Ref DSCAdminName
         DSCAdminPassword: !Ref DSCAdminPassword
-        DBPRDSEndpoint:
-          !GetAtt DSDatabaseAbstract.Outputs.DSDBEndpoint
+        DBPRDSEndpoint: !GetAtt DSDatabaseAbstract.Outputs.DSDBEndpoint
         DBPName: !Ref DBPName
         DBICAdminName: !Ref DBICAdminName
         DBICAdminPassword: !Ref DBICAdminPassword
@@ -385,16 +384,13 @@ Resources:
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
         DSMPMNode: 'No'
         DSISubnetID: !Ref DSISubnetID
-        DSMSG:
-          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
+        DSMSG: !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
-        DSIELB:
-          !GetAtt DSIELB.Outputs.DSIELB
+        DSIELB: !GetAtt DSIELB.Outputs.DSIELB
         DSM1CompleteWaitHandle: !Ref DSM1CompleteWaitHandle
-        DSIELBFQDN:
-          !GetAtt DSIELB.Outputs.ELBFQDN
+        DSIELBFQDN: !GetAtt DSIELB.Outputs.ELBFQDN
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -422,8 +418,7 @@ Resources:
         DSIPLicenseKey: !Ref DSIPLicenseKey
         DSCAdminName: !Ref DSCAdminName
         DSCAdminPassword: !Ref DSCAdminPassword
-        DBPRDSEndpoint:
-          !GetAtt DSDatabaseAbstract.Outputs.DSDBEndpoint
+        DBPRDSEndpoint: !GetAtt DSDatabaseAbstract.Outputs.DSDBEndpoint
         DBPName: !Ref DBPName
         DBICAdminName: !Ref DBICAdminName
         DBICAdminPassword: !Ref DBICAdminPassword
@@ -431,13 +426,11 @@ Resources:
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
         DSMPMNode: 'Yes'
         DSISubnetID: !Ref DSISubnetID
-        DSMSG:
-          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
+        DSMSG: !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
-        DSIELB:
-          !GetAtt DSIELB.Outputs.DSIELB
+        DSIELB: !GetAtt DSIELB.Outputs.DSIELB
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -471,16 +464,13 @@ Resources:
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
         DSMPMNode: 'No'
         DSISubnetID: !Ref DSISubnetID
-        DSMSG:
-          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
+        DSMSG: !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
         DSM1NoDBCompleteWaitHandle: !Ref DSM1NoDBCompleteWaitHandle
-        DSIELB:
-          !GetAtt DSIELB.Outputs.DSIELB
-        DSIELBFQDN:
-          !GetAtt DSIELB.Outputs.ELBFQDN
+        DSIELB: !GetAtt DSIELB.Outputs.DSIELB
+        DSIELBFQDN: !GetAtt DSIELB.Outputs.ELBFQDN
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -513,13 +503,11 @@ Resources:
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
         DSMPMNode: 'Yes'
         DSISubnetID: !Ref DSISubnetID
-        DSMSG:
-          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
+        DSMSG: !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
-        DSIELB:
-          !GetAtt DSIELB.Outputs.DSIELB
+        DSIELB: !GetAtt DSIELB.Outputs.DSIELB
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -544,8 +532,7 @@ Resources:
         DBPEngine: !Ref DBPEngine
         DBICAdminName: !Ref DBICAdminName
         DBICAdminPassword: !Ref DBICAdminPassword
-        RDSSG:
-          !GetAtt DSIRDSSecurityGroup.Outputs.RDSSG
+        RDSSG: !GetAtt DSIRDSSecurityGroup.Outputs.RDSSG
         MultiAZ: !Ref DBPMultiAZ
         StorageType: gp2
         DBPBackupDays: !Ref DBPBackupDays
@@ -568,8 +555,7 @@ Resources:
       Parameters:
         AWSIVPC: !Ref AWSIVPC
         DBPEngine: !Ref DBPEngine
-        DSMSG:
-          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
+        DSMSG: !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
   DSIDSMSecurityGroup:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -616,10 +602,8 @@ Resources:
             - s3-us-gov-west-1
             - s3
       Parameters:
-        DSMSG:
-          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
-        ELBSourceSG:
-          !GetAtt DSIELB.Outputs.ELBSourceSecurityGroup
+        DSMSG: !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
+        ELBSourceSG: !GetAtt DSIELB.Outputs.ELBSourceSecurityGroup
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
         DSIPGUIPort: !Ref DSIPGUIPort
   DSM1CompleteWaitHandle:
@@ -681,9 +665,7 @@ Outputs:
     Value:
       Fn::Sub: dsm://${DSIELB.Outputs.ELBFQDN}:${DSIPHeartbeatPort}/
   ELBCanonicalHostedZoneNameID:
-    Value:
-      !GetAtt DSIELB.Outputs.ELBCanonicalHostedZoneNameID
+    Value: !GetAtt DSIELB.Outputs.ELBCanonicalHostedZoneNameID
   ELBDNSName:
-    Value:
-      !GetAtt DSIELB.Outputs.ELBDNSName
+    Value: !GetAtt DSIELB.Outputs.ELBDNSName
 ...

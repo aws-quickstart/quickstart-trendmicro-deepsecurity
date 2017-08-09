@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'v5.4: This template creates the security group to allow communication
-  from Deep Security Managers to their RDS Instance (qs-1ngr590j9).'
+  from Deep Security Managers to their RDS Instance. (qs-1ngr590j9)'
 Parameters:
   AWSIVPC:
     Description: Existing VPC to deploy Deep Security Manager
@@ -65,8 +65,5 @@ Conditions:
     - PostgreSQL
 Outputs:
   RDSSG:
-    Value:
-      !GetAtt
-      - RDSSG
-      - GroupId
+    Value: !GetAtt RDSSG.GroupId
 ...
