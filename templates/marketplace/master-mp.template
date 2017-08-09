@@ -362,7 +362,7 @@ Resources:
     Condition: LaunchRDSInstance
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
@@ -377,9 +377,7 @@ Resources:
         DSCAdminName: !Ref DSCAdminName
         DSCAdminPassword: !Ref DSCAdminPassword
         DBPRDSEndpoint:
-          !GetAtt
-          - DSDatabaseAbstract
-          - Outputs.DSDBEndpoint
+          !GetAtt DSDatabaseAbstract.Outputs.DSDBEndpoint
         DBPName: !Ref DBPName
         DBICAdminName: !Ref DBICAdminName
         DBICAdminPassword: !Ref DBICAdminPassword
@@ -388,21 +386,15 @@ Resources:
         DSMPMNode: 'No'
         DSISubnetID: !Ref DSISubnetID
         DSMSG:
-          !GetAtt
-          - DSIDSMSecurityGroup
-          - Outputs.DSMSG
+          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
         DSIELB:
-          !GetAtt
-          - DSIELB
-          - Outputs.DSIELB
+          !GetAtt DSIELB.Outputs.DSIELB
         DSM1CompleteWaitHandle: !Ref DSM1CompleteWaitHandle
         DSIELBFQDN:
-          !GetAtt
-          - DSIELB
-          - Outputs.ELBFQDN
+          !GetAtt DSIELB.Outputs.ELBFQDN
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -416,7 +408,7 @@ Resources:
     Condition: DSMNode2DB
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
@@ -431,9 +423,7 @@ Resources:
         DSCAdminName: !Ref DSCAdminName
         DSCAdminPassword: !Ref DSCAdminPassword
         DBPRDSEndpoint:
-          !GetAtt
-          - DSDatabaseAbstract
-          - Outputs.DSDBEndpoint
+          !GetAtt DSDatabaseAbstract.Outputs.DSDBEndpoint
         DBPName: !Ref DBPName
         DBICAdminName: !Ref DBICAdminName
         DBICAdminPassword: !Ref DBICAdminPassword
@@ -442,16 +432,12 @@ Resources:
         DSMPMNode: 'Yes'
         DSISubnetID: !Ref DSISubnetID
         DSMSG:
-          !GetAtt
-          - DSIDSMSecurityGroup
-          - Outputs.DSMSG
+          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
         DSIELB:
-          !GetAtt
-          - DSIELB
-          - Outputs.DSIELB
+          !GetAtt DSIELB.Outputs.DSIELB
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -463,7 +449,7 @@ Resources:
     Condition: DoNotLaunchRDSInstance
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
@@ -486,21 +472,15 @@ Resources:
         DSMPMNode: 'No'
         DSISubnetID: !Ref DSISubnetID
         DSMSG:
-          !GetAtt
-          - DSIDSMSecurityGroup
-          - Outputs.DSMSG
+          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
         DSM1NoDBCompleteWaitHandle: !Ref DSM1NoDBCompleteWaitHandle
         DSIELB:
-          !GetAtt
-          - DSIELB
-          - Outputs.DSIELB
+          !GetAtt DSIELB.Outputs.DSIELB
         DSIELBFQDN:
-          !GetAtt
-          - DSIELB
-          - Outputs.ELBFQDN
+          !GetAtt DSIELB.Outputs.ELBFQDN
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -511,7 +491,7 @@ Resources:
     Condition: DSMNode2NoDB
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
         - QSS3Region:
             !If
@@ -534,16 +514,12 @@ Resources:
         DSMPMNode: 'Yes'
         DSISubnetID: !Ref DSISubnetID
         DSMSG:
-          !GetAtt
-          - DSIDSMSecurityGroup
-          - Outputs.DSMSG
+          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         DBPEngine: !Ref DBPEngine
         DSIPInstanceType: !Ref DSIPInstanceType
         CreateEIP: 'False'
         DSIELB:
-          !GetAtt
-          - DSIELB
-          - Outputs.DSIELB
+          !GetAtt DSIELB.Outputs.DSIELB
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -554,7 +530,7 @@ Resources:
     DependsOn: DSIRDSSecurityGroup
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/db/ds-db-abstract.template
         - QSS3Region:
             !If
@@ -569,9 +545,7 @@ Resources:
         DBICAdminName: !Ref DBICAdminName
         DBICAdminPassword: !Ref DBICAdminPassword
         RDSSG:
-          !GetAtt
-          - DSIRDSSecurityGroup
-          - Outputs.RDSSG
+          !GetAtt DSIRDSSecurityGroup.Outputs.RDSSG
         MultiAZ: !Ref DBPMultiAZ
         StorageType: gp2
         DBPBackupDays: !Ref DBPBackupDays
@@ -584,7 +558,7 @@ Resources:
     Condition: LaunchRDSInstance
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/rds-security-group.template
         - QSS3Region:
             !If
@@ -595,14 +569,12 @@ Resources:
         AWSIVPC: !Ref AWSIVPC
         DBPEngine: !Ref DBPEngine
         DSMSG:
-          !GetAtt
-          - DSIDSMSecurityGroup
-          - Outputs.DSMSG
+          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
   DSIDSMSecurityGroup:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/dsm-security-group.template
         - QSS3Region:
             !If
@@ -617,7 +589,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/dsm-elb.template
         - QSS3Region:
             !If
@@ -636,7 +608,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        !Sub
+        Fn::Sub:
         - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/dsm-sg-ingress-rules.template
         - QSS3Region:
             !If
@@ -645,13 +617,9 @@ Resources:
             - s3
       Parameters:
         DSMSG:
-          !GetAtt
-          - DSIDSMSecurityGroup
-          - Outputs.DSMSG
+          !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         ELBSourceSG:
-          !GetAtt
-          - DSIELB
-          - Outputs.ELBSourceSecurityGroup
+          !GetAtt DSIELB.Outputs.ELBSourceSecurityGroup
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
         DSIPGUIPort: !Ref DSIPGUIPort
   DSM1CompleteWaitHandle:
@@ -708,33 +676,14 @@ Conditions:
 Outputs:
   DeepSecurityConsole:
     Value:
-      !Join
-      - ''
-      - - https://
-        - !GetAtt
-          - DSIELB
-          - Outputs.ELBFQDN
-        - ':'
-        - !Ref DSIPGUIPort
+      Fn::Sub: https://${DSIELB.Outputs.ELBFQDN}:${DSIPGUIPort}
   DeepSecurityHeartbeat:
     Value:
-      !Join
-      - ''
-      - - dsm://
-        - !GetAtt
-          - DSIELB
-          - Outputs.ELBFQDN
-        - ':'
-        - !Ref DSIPHeartbeatPort
-        - /
+      Fn::Sub: dsm://${DSIELB.Outputs.ELBFQDN}:${DSIPHeartbeatPort}/
   ELBCanonicalHostedZoneNameID:
     Value:
-      !GetAtt
-      - DSIELB
-      - Outputs.ELBCanonicalHostedZoneNameID
+      !GetAtt DSIELB.Outputs.ELBCanonicalHostedZoneNameID
   ELBDNSName:
     Value:
-      !GetAtt
-      - DSIELB
-      - Outputs.ELBDNSName
+      !GetAtt DSIELB.Outputs.ELBDNSName
 ...
