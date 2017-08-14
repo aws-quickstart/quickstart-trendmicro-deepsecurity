@@ -20,7 +20,6 @@ Metadata:
       Parameters:
       - AWSVPC
       - DeepSecuritySubnet
-      - DatabaseEngine
       - DatabaseSubnet1
       - DatabaseSubnet2
     - Label:
@@ -39,22 +38,22 @@ Metadata:
         default: EC2 Key Pair for SSH access
       AWSVPC:
         default: VPC for Deep Security Components
+      DatabaseEngine:
+        default: Choose the backend database
+      DatabaseSubnet1:
+        default: Primary private subnet for RDS
+      DatabaseSubnet2:
+        default: Secondary private subnet for RDS
+      DatabaseAdminName:
+        default: Administrator username for RDS Instance
+      DatabaseAdminPassword:
+        default: Administrator password for RDS Instance
       DeepSecuritySubnet:
         default: Public Subnet for Deep Security Managers
       DeepSecurityAdminName:
         default: Administrator username for Deep Security
       DeepSecurityAdminPass:
         default: Administrator password for Deep Security
-      DatabaseSubnet1:
-        default: Primary private subnet for RDS
-      DatabaseSubnet2:
-        default: Secondary private subnet for RDS
-      DatabaseEngine:
-        default: Choose the backend database
-      DatabaseAdminName:
-        default: Administrator username for RDS Instance
-      DatabaseAdminPassword:
-        default: Administrator password for RDS Instance
       LicenseKey:
         default: Deep Security License Key. May be left default to enter key after
           deployment
