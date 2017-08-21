@@ -205,6 +205,8 @@ Mappings:
       BYOL: m4.xlarge
     sa-east-1:
       BYOL: m4.xlarge
+    us-gov-west-1:
+      BYOL: m4.xlarge
   RDSInstanceSize:
     us-east-1:
       Oracle: db.m4.xlarge
@@ -262,6 +264,10 @@ Mappings:
       Oracle: db.m3.xlarge
       MSSQL: db.m3.xlarge
       PostgreSQL: db.m3.xlarge
+    us-gov-west-1:
+      Oracle: db.m3.xlarge
+      MSSQL: db.m3.xlarge
+      PostgreSQL: db.m3.xlarge
   RDSMultiAZ:
     us-east-1:
       Oracle: 'true'
@@ -316,6 +322,10 @@ Mappings:
       MSSQL: 'true'
       PostgreSQL: 'true'
     sa-east-1:
+      Oracle: 'true'
+      MSSQL: 'false'
+      PostgreSQL: 'true'
+    us-gov-west-1:
       Oracle: 'true'
       MSSQL: 'false'
       PostgreSQL: 'true'
