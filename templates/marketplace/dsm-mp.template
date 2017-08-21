@@ -251,6 +251,8 @@ Mappings:
     sa-east-1:
       PerHost: ami-1f275373
       BYOL: ami-3d057151
+    us-gov-west-1:
+      BYOL: ami-f5de5e94
   DSMSIZE:
     us-east-1:
       PerHost: m4.xlarge
@@ -294,6 +296,9 @@ Mappings:
     sa-east-1:
       PerHost: m4.xlarge
       BYOL: m4.xlarge
+    us-gov-west-1:
+      PerHost: m4.xlarge
+      BYOL: m4.xlarge
   DSMDBMap:
     SQL:
       DbTypeString: Microsoft SQL Server
@@ -326,8 +331,9 @@ Resources:
         PolicyDocument:
           Version: 2012-10-17
           Statement:
-          - Action:
-            - s3:GetObject
+          - Effect: Allow
+            Action:
+              - s3:GetObject
             Resource:
               Fn::Sub:
               - arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*
