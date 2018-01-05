@@ -350,15 +350,18 @@ Resources:
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
 Conditions:
   PerHostSupportedRegion:
-    !Not [!Or [Condition: GovCloudCondition, Condition: ParisCondition]]
+    !Not
+    - !Or
+      - Condition: GovCloudCondition
+      - Condition: ParisCondition
   GovCloudCondition:
     !Equals
     - !Ref AWS::Region
     - us-gov-west-1
   ParisCondition:
-      !Equals
-      - !Ref AWS::Region
-      - eu-west-3
+    !Equals
+    - !Ref AWS::Region
+    - eu-west-3
 Outputs:
   DeepSecurityConsole:
     Value: !GetAtt MasterMP.Outputs.DeepSecurityConsole
