@@ -338,7 +338,7 @@ Resources:
           Statement:
           - Effect: Allow
             Action:
-              - s3:GetObject
+            - s3:GetObject
             Resource:
               Fn::Sub:
               - arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*
