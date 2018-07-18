@@ -778,9 +778,9 @@ Resources:
               - -e $? -r "Complete"
               - !Join
                 - ''
-                - - '-e $? -r "DSM Node configuration complete" '
-                  - !Base64
-                      Ref: DSM1CompleteWaitHandle
+                - - '-e $? -r "DSM Node configuration complete" "'
+                  - Ref: DSM1CompleteWaitHandle
+                  - '"'
             ProxyOption2:
               !If
               - UseProxy

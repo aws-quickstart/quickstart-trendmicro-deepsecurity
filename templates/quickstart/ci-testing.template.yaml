@@ -83,6 +83,16 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
     Type: String
+  AvailabilityZones:
+  Description: List of Availability Zones to use for the subnets in the VPC. Three
+    Availability Zones are used for this deployment, and the logical order of your
+    selections is preserved.
+  Type: List<AWS::EC2::AvailabilityZone::Name>
+  KeyPairName:
+    Description: The name of an existing public/private key pair, which allows you
+      to securely connect to your instance after it launches
+    Type: AWS::EC2::KeyPair::KeyName
+Mappings:
 Mappings:
   DSMSIZE:
     us-east-1:
@@ -265,7 +275,15 @@ Mappings:
     1001-2000:
       Size: '4'
 Resources:
-  MasterMP:
+  VPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub 'https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template'
+      Parameters:
+        AvailabilityZones: !Join [ ',', !Ref 'AvailabilityZones' ]
+        KeyPairName: !Ref 'KeyPairName'
+        NumberOfAZs: '3'
+  TrendMicroMaster:
     Type: AWS::CloudFormation::Stack
     Condition: PerHostSupportedRegion
     Properties:
@@ -315,8 +333,8 @@ Resources:
             - DeploymentSize
             - !Ref ProtectedInstances
             - Size
-        DBISubnet1: !Ref DatabaseSubnet1
-        DBISubnet2: !Ref DatabaseSubnet2
+        DBISubnet1: !Ref 'VPCStack.Outputs.PrivateSubnet1AID'
+        DBISubnet2: !Ref 'VPCStack.Outputs.PrivateSubnet2AID'
         DSIPLicense: PerHost
         DBPMultiAZ: 'true'
         QSS3BucketName: !Ref QSS3BucketName
@@ -331,7 +349,4 @@ Conditions:
     !Equals
     - !Ref AWS::Region
     - us-gov-west-1
-Outputs:
-  DeepSecurityConsole:
-    Value: !GetAtt MasterMP.Outputs.DeepSecurityConsole
 ...
