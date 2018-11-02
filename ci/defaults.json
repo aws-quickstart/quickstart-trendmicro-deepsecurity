@@ -6,7 +6,7 @@
     "ParameterValue": "vpc-ae07a6cb"
 }, {
     "ParameterKey": "DeepSecuritySubnet",
-    "ParameterValue": "t2.small"
+    "ParameterValue": "subnet-35413a42"
 }, {
     "ParameterKey": "DeepSecurityAdminName",
     "ParameterValue": "admin"
