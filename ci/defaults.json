@@ -1,1 +1,25 @@
-{}
+[{
+    "ParameterKey": "KeyPairName",
+    "ParameterValue": "mykey"
+}, {
+    "ParameterKey": "AWSVPC",
+    "ParameterValue": "vpc-ae07a6cb"
+}, {
+    "ParameterKey": "DeepSecuritySubnet",
+    "ParameterValue": "subnet-35413a42"
+}, {
+    "ParameterKey": "DeepSecurityAdminName",
+    "ParameterValue": "admin"
+}, {
+    "ParameterKey": "DeepSecurityAdminPass",
+    "ParameterValue": "$[taskcat_genpass_8A]"
+}, {
+    "ParameterKey": "DatabaseSubnet1",
+    "ParameterValue": "subnet-974239e0"
+}, {
+    "ParameterKey": "DatabaseSubnet2",
+    "ParameterValue": "subnet-5e26703b"
+}, {
+    "ParameterKey": "ProtectedInstances",
+    "ParameterValue": "1-100"
+}]
