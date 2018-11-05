@@ -1,0 +1,18 @@
+[
+{
+    "ParameterKey": "KeyPairName",
+    "ParameterValue": "override"
+},
+{
+    "ParameterKey": "AvailabilityZones",
+    "ParameterValue": "$[taskcat_genaz_3]"
+},
+{
+    "ParameterKey": "DeepSecurityAdminPass",
+    "ParameterValue": "$[taskcat_genpass_8A]"
+},
+{
+    "ParameterKey": "ProtectedInstances",
+    "ParameterValue": "1-100"
+}
+]

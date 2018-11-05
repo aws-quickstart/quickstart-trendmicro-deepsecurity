@@ -1,6 +1,6 @@
 [{
     "ParameterKey": "KeyPairName",
-    "ParameterValue": "mykey"
+    "ParameterValue": "cikey"
 }, {
     "ParameterKey": "AWSVPC",
     "ParameterValue": "vpc-ae07a6cb"
