@@ -437,7 +437,7 @@ Resources:
     Type: AWS::EC2::Instance
     Metadata:
       AWS::CloudFormation::Authentication:
-        S3AcccessCreds:
+        S3AccessCreds:
           type: S3
           roleName: !Ref DSMRole
           buckets: !Ref QSS3BucketName
