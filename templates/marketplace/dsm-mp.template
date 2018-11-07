@@ -572,7 +572,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
-              authentication: S3AcccessCreds
+              authentication: S3AccessCreds
             /etc/cfn/kill-mp-web-installer.sh:
               source:
                 Fn::Sub:
@@ -584,7 +584,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
-              authentication: S3AcccessCreds
+              authentication: S3AccessCreds
             /etc/cfn/add-aws-account-with-instance-role.sh:
               source:
                 Fn::Sub:
@@ -596,7 +596,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
-              authentication: S3AcccessCreds
+              authentication: S3AccessCreds
           commands:
             5-check-service:
               command:
@@ -627,7 +627,7 @@ Resources:
                     - s3
               owner: root
               mode: '000755'
-              authentication: S3AcccessCreds
+              authentication: S3AccessCreds
           commands:
             1-create-db:
               command:
@@ -656,7 +656,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
-              authentication: S3AcccessCreds
+              authentication: S3AccessCreds
             /etc/cfn/set-lb-settings.sh:
               source:
                 Fn::Sub:
@@ -668,7 +668,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
-              authentication: S3AcccessCreds
+              authentication: S3AccessCreds
           commands:
             1-setup-elb-listener:
               command:
@@ -697,7 +697,7 @@ Resources:
                     - s3
               owner: root
               mode: '000700'
-              authentication: S3AcccessCreds
+              authentication: S3AccessCreds
           commands:
             1-reactivate-manager.sh:
               command:
