@@ -25,3 +25,7 @@ tests:
   test-deepsec:
     parameter_input: inputs.json
     template_file: quickstart/trendmicro-deepsecurity-vpc.template
+    regions:
+     - us-east-2
+     - eu-west-1
+     - us-east-1
