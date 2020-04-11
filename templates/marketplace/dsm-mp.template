@@ -193,6 +193,10 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
@@ -363,14 +367,9 @@ Resources:
           - Effect: Allow
             Action:
             - s3:GetObject
-            Resource:
-              Fn::Sub:
-              - arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*
-              - Partition:
-                  !If
-                  - GovCloudCondition
-                  - aws-us-gov
-                  - aws
+            Resource: !Sub
+              - arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*
+              - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       - !If
         - AddToELB
         - PolicyName: DeepSecurityManagerInstancePolicy
@@ -457,7 +456,7 @@ Resources:
         S3AccessCreds:
           type: S3
           roleName: !Ref DSMRole
-          buckets: !Ref QSS3BucketName
+          buckets: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       AWS::CloudFormation::Init:
         configSets:
           default:
@@ -581,36 +580,27 @@ Resources:
             /etc/cfn/set-aia-settings.sh:
               source:
                 Fn::Sub:
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/set-aia-settings.sh
-                - QSS3Region:
-                    !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/set-aia-settings.sh
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               owner: root
               mode: '000700'
               authentication: S3AccessCreds
             /etc/cfn/kill-mp-web-installer.sh:
               source:
                 Fn::Sub:
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/kill-mp-web-installer.sh
-                - QSS3Region:
-                    !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/kill-mp-web-installer.sh
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               owner: root
               mode: '000700'
               authentication: S3AccessCreds
             /etc/cfn/add-aws-account-with-instance-role.sh:
               source:
                 Fn::Sub:
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/add-aws-account-with-instance-role.sh
-                - QSS3Region:
-                    !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/add-aws-account-with-instance-role.sh
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               owner: root
               mode: '000700'
               authentication: S3AccessCreds
@@ -636,12 +626,9 @@ Resources:
             /etc/cfn/rhel-scripts/create-dsm-db.py:
               source:
                 Fn::Sub:
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-dsm-db.py
-                - QSS3Region:
-                    !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/create-dsm-db.py
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               owner: root
               mode: '000755'
               authentication: S3AccessCreds
@@ -665,24 +652,18 @@ Resources:
             /etc/cfn/create-console-listener.sh:
               source:
                 Fn::Sub:
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/create-console-listener.sh
-                - QSS3Region:
-                    !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/create-console-listener.sh
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               owner: root
               mode: '000700'
               authentication: S3AccessCreds
             /etc/cfn/set-lb-settings.sh:
               source:
                 Fn::Sub:
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/set-lb-settings.sh
-                - QSS3Region:
-                    !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/set-lb-settings.sh
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               owner: root
               mode: '000700'
               authentication: S3AccessCreds
@@ -706,12 +687,9 @@ Resources:
             /etc/cfn/reactivate-manager.sh:
               source:
                 Fn::Sub:
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/reactivate-manager.sh
-                - QSS3Region:
-                    !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/reactivate-manager.sh
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               owner: root
               mode: '000700'
               authentication: S3AccessCreds
@@ -807,6 +785,7 @@ Resources:
               - Fn::Sub: ' --https-proxy https://${DSProxyUrl}'
               - ''
 Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   DBTypeIsSQL:
     !Equals
     - !Ref DBPEngine
