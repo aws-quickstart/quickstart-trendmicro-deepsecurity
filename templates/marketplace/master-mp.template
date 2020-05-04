@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.18: Trend Micro Deep Security Marketplace master template. For more
+Description: 'v5.30: Trend Micro Deep Security Marketplace master template. For more
   information see http://aws.trendmicro.com. (qs-1ngr590jt)'
 Metadata:
   AWS::CloudFormation::Interface:
@@ -119,17 +119,22 @@ Parameters:
     AllowedPattern: '[-_a-zA-Z0-9]*'
     ConstraintDescription: Subnet ID must exist in the chosen VPC
   DBIRDSInstanceSize:
-    Default: db.m3.large
+    Default: db.m5.large
     Description: Trend Micro Deep Security Database instance class
     Type: String
     AllowedValues:
     - db.m4.large
     - db.m4.xlarge
     - db.m4.2xlarge
+    - db.m4.4xlarge
     - db.m3.medium
     - db.m3.large
     - db.m3.xlarge
     - db.m3.2xlarge
+    - db.m5.medium
+    - db.m5.large
+    - db.m5.xlarge
+    - db.m5.2xlarge
     - db.r3.large
     - db.r3.xlarge
     - db.r3.2xlarge
@@ -254,17 +259,16 @@ Parameters:
     Description: Amazon EC2 instance type for BYOL Deep Security Manager Node Instances
       (ignored for other license types)
     Type: String
-    Default: m3.xlarge
+    Default: m5.xlarge
     AllowedValues:
-    - m3.large
-    - m3.xlarge
-    - m3.2xlarge
     - m4.large
     - m4.xlarge
     - m4.2xlarge
+    - m4.4xlarge
     - m5.large
     - m5.xlarge
     - m5.2xlarge
+    - m5.4xlarge
     - c3.xlarge
     - c3.2xlarge
     - c3.4xlarge
@@ -529,6 +533,7 @@ Resources:
             - s3-us-gov-west-1
             - s3
       Parameters:
+        AWSIKeyPairName: !Ref AWSIKeyPairName
         DBPName: !Ref DBPName
         DBIStorageAllocation: !Ref DBIStorageAllocation
         DBIRDSInstanceSize: !Ref DBIRDSInstanceSize
@@ -619,7 +624,7 @@ Resources:
     - DSMNode1
     Properties:
       Handle: !Ref DSM1CompleteWaitHandle
-      Timeout: '3600'
+      Timeout: '1800'
   DSM1NoDBCompleteWaitHandle:
     Condition: DoNotLaunchRDSInstance
     Type: AWS::CloudFormation::WaitConditionHandle
@@ -630,7 +635,7 @@ Resources:
     - DSMNode1NoDB
     Properties:
       Handle: !Ref DSM1CompleteWaitHandle
-      Timeout: '3600'
+      Timeout: '1800'
 Conditions:
   DSIsMultiNode:
     !Equals
@@ -657,9 +662,13 @@ Conditions:
     - !Ref DSELBPosture
     - Internet-facing
   GovCloudCondition:
-    !Equals
-    - !Ref AWS::Region
-    - us-gov-west-1
+    !Or 
+    - !Equals 
+      - !Ref AWS::Region
+      - us-gov-west-1
+    - !Equals 
+      - !Ref AWS::Region
+      - us-gov-east-1
 Outputs:
   DeepSecurityConsole:
     Value:

@@ -1,17 +1,22 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.18: This template deploys a PostgreSQL RDS instance for Deep Security
+Description: 'v5.30: This template deploys a PostgreSQL RDS instance for Deep Security
   Manager. (qs-1ngr590ie)'
 Parameters:
   DBIRDSInstanceSize:
-    Default: db.m3.large
+    Default: db.m5.large
     Description: Trend Micro Deep Security Database instance class
     Type: String
     AllowedValues:
+    - db.m5.medium
+    - db.m5.large
+    - db.m5.xlarge
+    - db.m5.2xlarge
     - db.m4.medium
     - db.m4.large
     - db.m4.xlarge
     - db.m4.2xlarge
+    - db.m4.4xlarge
     - db.m3.medium
     - db.m3.large
     - db.m3.xlarge
@@ -99,7 +104,7 @@ Resources:
       AllocatedStorage: !Ref DBIStorageAllocation
       DBInstanceClass: !Ref DBIRDSInstanceSize
       Engine: postgres
-      EngineVersion: 9.6.1
+      EngineVersion: 10.9
       MasterUsername: !Ref DBICAdminName
       MasterUserPassword: !Ref DBICAdminPassword
       VPCSecurityGroups:
@@ -108,6 +113,7 @@ Resources:
       BackupRetentionPeriod: !Ref DBPBackupDays
       DBSubnetGroupName: !Ref DBISubnetGroupName
       StorageType: !Ref StorageType
+      StorageEncrypted: true
       Tags:
       - Key: Application
         Value: Deep Security Manager

@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.18: Deploys Deep Security Manager to AWS. This template is designed
+Description: 'v5.30: Deploys Deep Security Manager to AWS. This template is designed
   to be nested in a stack, and requires several passed parameters to launch. **WARNING**
   This template creates Amazon EC2 instances and related resources. You will be billed
   for the AWS resources used if you create a stack from this template. (qs-1ngr590jo)'
@@ -63,17 +63,16 @@ Parameters:
   DSIPInstanceType:
     Description: Amazon EC2 instance type for the Deep Security Manager Node Instances
     Type: String
-    Default: m3.large
+    Default: m5.large
     AllowedValues:
-    - m3.large
-    - m3.xlarge
-    - m3.2xlarge
     - m4.large
     - m4.xlarge
     - m4.2xlarge
+    - m4.4xlarge
     - m5.large
     - m5.xlarge
     - m5.2xlarge
+    - m5.4xlarge
     - c3.xlarge
     - c3.2xlarge
     - c3.4xlarge
@@ -215,53 +214,62 @@ Parameters:
 Mappings:
   DSMAMI:
     ap-northeast-1:
-      PerHost: ami-0379cadcc4020a755
-      BYOL: ami-08495528ca4dd913c
+      PerHost: ami-0b25d1b6668ece3b6
+      BYOL: ami-01266ddf117fb8321
     ap-northeast-2:
-      PerHost: ami-01e684a80d8d25a34
-      BYOL: ami-0861bc167cf69cd3f
+      PerHost: ami-09fd0839c99eca15f
+      BYOL: ami-070b872829c013de9
     ap-south-1:
-      PerHost: ami-0310bbd01057491a9
-      BYOL: ami-0ef930026e3327313
+      PerHost: ami-087a9203ad68eab9b
+      BYOL: ami-02e2d939ffb896065
     ap-southeast-1:
-      PerHost: ami-0e059df7e5a4fa780
-      BYOL: ami-09f7b245b40a68e43
+      PerHost: ami-07034c540a78e4a68
+      BYOL: ami-086585aa0063cc888
     ap-southeast-2:
-      PerHost: ami-0ae6d033f6f842eb6
-      BYOL: ami-0da923f3d1e3ee624
+      PerHost: ami-0e1a3b9f764af7204
+      BYOL: ami-036ed91efe0eb2b50
     ca-central-1:
-      PerHost: ami-0304538deb76da7dd
-      BYOL: ami-0b8b7c56d3d01ad0e
+      PerHost: ami-0d8f7c5469be74dc4
+      BYOL: ami-0834a5f2a6661ef4a
+    eu-north-1:
+      PerHost: ami-0084375c54d7a3f8c
+      BYOL: ami-064a92bbb2901598e
     eu-central-1:
-      PerHost: ami-0257dda01ea3266c1
-      BYOL: ami-020fe3c993f7360d5
+      PerHost: ami-04df980f348dc36bc
+      BYOL: ami-0221930ec32159ff9
     eu-west-1:
-      PerHost: ami-086a7f436c346c1ea
-      BYOL: ami-0b4ec49bd7ec09e20
+      PerHost: ami-0bfbeac12e509d93e
+      BYOL: ami-0484ec24af8cd42d8
     eu-west-2:
-      PerHost: ami-057444042095d9827
-      BYOL: ami-04097d43d0d62dff5
+      PerHost: ami-0e335b92acc072166
+      BYOL: ami-0f423f94c479816cf
     eu-west-3:
-      PerHost: ami-03111690ab40937b9
-      BYOL: ami-0b41346a8c7281fcf
+      PerHost: ami-02f8a8df3c9e99c84
+      BYOL: ami-087e9dbc5b6a1b168
     sa-east-1:
-      PerHost: ami-00ddf20b9cfe647de
-      BYOL: ami-04112fabf1158c10b
+      PerHost: ami-0d0886279d98a552a
+      BYOL: ami-04593be55dfad60e9
     us-east-1:
-      PerHost: ami-0ecd04d3f4ade6df1
-      BYOL: ami-080c8a3073759ce1b
+      PerHost: ami-0ac75de992838a10c
+      BYOL: ami-0e70f6cc7c38a7815
     us-east-2:
-      PerHost: ami-0fbee806719e7918f
-      BYOL: ami-00fd2bdaba3211bb5
+      PerHost: ami-017796f62594f2a93
+      BYOL: ami-084d50b32481db320
     us-gov-west-1:
-      PerHost: ami-e9cdaf88
-      BYOL: ami-f3d2b092
+      PerHost: ami-a6320fc7
+      BYOL: ami-fa1a279b
     us-west-1:
-      PerHost: ami-0f00c6edbb8d67f60
-      BYOL: ami-0fcfc8c230724b093
+      PerHost: ami-0a50bd481bbf51105
+      BYOL: ami-07b1109ee5bb048e9
     us-west-2:
-      PerHost: ami-0bbdbaaaa7a285704
-      BYOL: ami-0f5ba863007459030
+      PerHost: ami-0556a6e419a35e363
+      BYOL: ami-041a7e695c4244c59
+    me-south-1 :
+      PerHost: ami-0ff44c44ddd3f80df
+      BYOL: ami-011785d9c069322fd
+    us-gov-east-1:
+      PerHost: ami-c26d81b3
+      BYOL: ami-8317fbf2
   DSMSIZE:
     us-east-1:
       PerHost: m5.xlarge
@@ -293,6 +301,9 @@ Mappings:
     ap-northeast-1:
       PerHost: m5.xlarge
       BYOL: m5.xlarge
+    eu-north-1:
+      PerHost: m5.xlarge
+      BYOL: m5.xlarge
     eu-central-1:
       PerHost: m5.xlarge
       BYOL: m5.xlarge
@@ -309,6 +320,12 @@ Mappings:
       PerHost: m5.xlarge
       BYOL: m5.xlarge
     us-gov-west-1:
+      PerHost: m5.xlarge
+      BYOL: m5.xlarge
+    me-south-1:
+      PerHost: m5.xlarge
+      BYOL: m5.xlarge
+    us-gov-east-1:
       PerHost: m5.xlarge
       BYOL: m5.xlarge
   DSMDBMap:
@@ -383,7 +400,7 @@ Resources:
                 !Join
                 - ''
                 - - !If
-                    - RegionIsUsGovWest1
+                    - GovCloudCondition
                     - 'arn:aws-us-gov:elasticloadbalancing:'
                     - 'arn:aws:elasticloadbalancing:'
                   - !Ref AWS::Region
@@ -399,7 +416,7 @@ Resources:
                 !Join
                 - ''
                 - - !If
-                    - RegionIsUsGovWest1
+                    - GovCloudCondition
                     - 'arn:aws-us-gov:iam::'
                     - 'arn:aws:iam::'
                   - !Ref AWS::AccountId
@@ -781,31 +798,19 @@ Resources:
               - -e $? -r "Complete"
               - !Join
                 - ''
-                - - '-e $? -r "DSM Node configuration complete" "'
-                  - Ref: DSM1CompleteWaitHandle
-                  - '"'
+                - - '-e $? -r "DSM Node configuration complete" '
+                  - !Base64
+                      Ref: DSM1CompleteWaitHandle
             ProxyOption2:
               !If
               - UseProxy
               - Fn::Sub: ' --https-proxy https://${DSProxyUrl}'
               - ''
 Conditions:
-  DBTypeIsOracle:
-    !Equals
-    - !Ref DBPEngine
-    - Oracle
   DBTypeIsSQL:
     !Equals
     - !Ref DBPEngine
     - SQL
-  DBTypeIsEmbedded:
-    !Equals
-    - !Ref DBPEngine
-    - Embedded
-  DBTypeIsPostgreSQL:
-    !Equals
-    - !Ref DBPEngine
-    - PostgreSQL
   IsFirstNode:
     !Equals
     - !Ref DSMPMNode
@@ -865,19 +870,19 @@ Conditions:
     !Equals
     - !Ref DSCLicenseType
     - Network
-  RegionIsUsGovWest1:
-    !Equals
-    - !Ref AWS::Region
-    - us-gov-west-1
   UseProxy:
     !Not
     - !Equals
       - !Ref DSProxyUrl
       - ''
   GovCloudCondition:
-    !Equals
-    - !Ref AWS::Region
-    - us-gov-west-1
+    !Or 
+    - !Equals 
+      - !Ref AWS::Region
+      - us-gov-west-1
+    - !Equals 
+      - !Ref AWS::Region
+      - us-gov-east-1
 Outputs:
   DSMFQDN:
     Value: !GetAtt DSM.PublicDnsName
