@@ -332,6 +332,10 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
@@ -369,13 +373,10 @@ Resources:
     Condition: LaunchRDSInstance
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIKeyPairName: !Ref AWSIKeyPairName
         AWSIVPC: !Ref AWSIVPC
@@ -400,6 +401,7 @@ Resources:
         DSIELBFQDN: !GetAtt DSIELB.Outputs.ELBFQDN
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         DSCLicenseType: !Ref DSCLicenseType
         DSProxyUrl: !Ref DSProxyUrl
@@ -411,13 +413,10 @@ Resources:
     Condition: DSMNode2DB
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIKeyPairName: !Ref AWSIKeyPairName
         AWSIVPC: !Ref AWSIVPC
@@ -440,6 +439,7 @@ Resources:
         DSIELB: !GetAtt DSIELB.Outputs.DSIELB
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         DSProxyUrl: !Ref DSProxyUrl
   DSMNode1NoDB:
@@ -449,13 +449,10 @@ Resources:
     Condition: DoNotLaunchRDSInstance
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIKeyPairName: !Ref AWSIKeyPairName
         AWSIVPC: !Ref AWSIVPC
@@ -480,6 +477,7 @@ Resources:
         DSIELBFQDN: !GetAtt DSIELB.Outputs.ELBFQDN
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         DSProxyUrl: !Ref DSProxyUrl
   DSMNode2NoDB:
@@ -488,13 +486,10 @@ Resources:
     Condition: DSMNode2NoDB
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/marketplace/dsm-mp.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIKeyPairName: !Ref AWSIKeyPairName
         AWSIVPC: !Ref AWSIVPC
@@ -517,6 +512,7 @@ Resources:
         DSIELB: !GetAtt DSIELB.Outputs.DSIELB
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         DSProxyUrl: !Ref DSProxyUrl
   DSDatabaseAbstract:
@@ -525,13 +521,10 @@ Resources:
     DependsOn: DSIRDSSecurityGroup
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/db/ds-db-abstract.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-abstract.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIKeyPairName: !Ref AWSIKeyPairName
         DBPName: !Ref DBPName
@@ -547,19 +540,17 @@ Resources:
         DBISubnet1: !Ref DBISubnet1
         DBISubnet2: !Ref DBISubnet2
         QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
   DSIRDSSecurityGroup:
     Type: AWS::CloudFormation::Stack
     Condition: LaunchRDSInstance
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/rds-security-group.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/security-groups/rds-security-group.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIVPC: !Ref AWSIVPC
         DBPEngine: !Ref DBPEngine
@@ -568,13 +559,10 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/dsm-security-group.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/security-groups/dsm-security-group.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIVPC: !Ref AWSIVPC
         DSIPGUIPort: !Ref DSIPGUIPort
@@ -583,13 +571,10 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/dsm-elb.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/dsm-elb.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIVPC: !Ref AWSIVPC
         DSIPHeartbeatPort: !Ref DSIPHeartbeatPort
@@ -597,18 +582,16 @@ Resources:
         DSISubnetID: !Ref DSISubnetID
         DSELBPosture: !Ref DSELBPosture
         QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
   DSIDSMSecurityGroupIngressRules:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub:
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/common/security-groups/dsm-sg-ingress-rules.template
-        - QSS3Region:
-            !If
-            - GovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/security-groups/dsm-sg-ingress-rules.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         DSMSG: !GetAtt DSIDSMSecurityGroup.Outputs.DSMSG
         ELBSourceSG: !GetAtt DSIELB.Outputs.ELBSourceSecurityGroup
@@ -637,6 +620,7 @@ Resources:
       Handle: !Ref DSM1CompleteWaitHandle
       Timeout: '1800'
 Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   DSIsMultiNode:
     !Equals
     - !Ref DSIMultiNode
