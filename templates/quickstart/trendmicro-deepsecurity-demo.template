@@ -1,10 +1,11 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'QS(0011) - v5.31: Quick Start that deploys Trend Micro Deep Security
-  into an existing VPC with a Multi-AZ PostgreSQL RDS instance  **WARNING** This template
+Description: 'DEMO ONLY - v5.31: Demo of the Trend Micro Deep Security Quick Start.
+  This template creates the VPC infrastructure needed for the Quick Start and deploys an
+  EC2 instance with Docker and PostgreSQL for the database. **WARNING** This template
   uses images from the AWS Marketplace and an active subscription is required - Please
   see the Quick Start documentation for more details. You will be billed for the AWS
-  resources used if you create a stack from this template. (qs-1ngr590k4)'
+  resources used if you create a stack from this template.'
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -14,14 +15,6 @@ Metadata:
       - DeepSecurityAdminName
       - DeepSecurityAdminPass
       - AWSKeyPairName
-      - ProtectedInstances
-    - Label:
-        default: Network Configuration
-      Parameters:
-      - AWSVPC
-      - DeepSecuritySubnet
-      - DatabaseSubnet1
-      - DatabaseSubnet2
     - Label:
         default: AWS Quick Start Configuration
       Parameters:
@@ -31,20 +24,10 @@ Metadata:
     ParameterLabels:
       AWSKeyPairName:
         default: EC2 Key Pair for SSH access
-      AWSVPC:
-        default: VPC for Deep Security Components
-      DeepSecuritySubnet:
-        default: Public Subnet for Deep Security Managers
       DeepSecurityAdminName:
         default: Administrator username for Deep Security
       DeepSecurityAdminPass:
         default: Administrator password for Deep Security
-      DatabaseSubnet1:
-        default: Primary private subnet for RDS
-      DatabaseSubnet2:
-        default: Secondary private subnet for RDS
-      ProtectedInstances:
-        default: Number of instances you expect to protect with Deep Security Agents
       QSS3BucketName:
         default: Quick Start S3 Bucket Name
       QSS3BucketRegion:
@@ -59,32 +42,6 @@ Parameters:
     MinLength: '1'
     MaxLength: '255'
     ConstraintDescription: Select an existing EC2 Key Pair.
-  AWSVPC:
-    Description: Select an existing VPC to deploy Deep Security Manager.
-    Type: AWS::EC2::VPC::Id
-    MinLength: '1'
-    MaxLength: '255'
-    AllowedPattern: '[-_a-zA-Z0-9]*'
-  DatabaseSubnet1:
-    Description: Select a private subnet for the RDS database.  Must be a private
-      subnet contained in the VPC chosen above.
-    Type: AWS::EC2::Subnet::Id
-    ConstraintDescription: RDS Subnet Groups must be comprised of 2 subnets in seperate
-      availability zones within the specified VPC for deploying this template
-  DatabaseSubnet2:
-    Description: Select a second private subnet for the RDS database.  Must be a private
-      subnet contained in the VPC chosen above.
-    Type: AWS::EC2::Subnet::Id
-    ConstraintDescription: RDS Subnet Groups must be comprised of 2 subnets in seperate
-      availability zones within the specified VPC for deploying this template
-  DeepSecuritySubnet:
-    Description: Select an existing Subnet for Deep Security Manager. Must be a public
-      subnet contained in the VPC chosen above.
-    Type: AWS::EC2::Subnet::Id
-    MinLength: '1'
-    MaxLength: '255'
-    AllowedPattern: '[-_a-zA-Z0-9]*'
-    ConstraintDescription: Subnet ID must exist in the chosen VPC
   DeepSecurityAdminName:
     Default: MasterAdmin
     Description: The Deep Security Manager administrator username for Web Console
@@ -106,14 +63,6 @@ Parameters:
     AllowedPattern: '[a-zA-Z0-9!^*\-_+]*'
     ConstraintDescription: Can only contain alphanumeric characters or the following
       special characters !^*-_+ Min length 8, max length 41
-  ProtectedInstances:
-    Description: Select how many instances would you like to protect.
-    Type: String
-    AllowedValues:
-    - 1-100
-    - 101-500
-    - 501-1000
-    - 1001-2000
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
@@ -154,6 +103,11 @@ Mappings:
       '2': m5.large
       '3': m5.xlarge
       '4': m5.xlarge
+    eu-north-1:
+      '1': m5.large
+      '2': m5.large
+      '3': m5.xlarge
+      '4': m5.xlarge
     eu-west-1:
       '1': m5.large
       '2': m5.large
@@ -204,11 +158,6 @@ Mappings:
       '2': m5.large
       '3': m5.xlarge
       '4': m5.xlarge
-    eu-north-1:
-      '1': m5.large
-      '2': m5.large
-      '3': m5.xlarge
-      '4': m5.xlarge
     eu-west-2:
       '1': m5.large
       '2': m5.large
@@ -234,152 +183,28 @@ Mappings:
       '2': m5.large
       '3': m5.xlarge
       '4': m5.xlarge
-  RDSStorageSize:
-    1-100:
-      Size: '50'
-    101-500:
-      Size: '150'
-    501-1000:
-      Size: '200'
-    1001-2000:
-      Size: '300'
-  RDSInstanceSize:
-    us-east-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    us-east-2:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    us-west-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    us-west-2:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    ca-central-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    ap-south-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    ap-northeast-2:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    ap-southeast-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    ap-southeast-2:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    ap-northeast-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    eu-north-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    eu-central-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    eu-west-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    eu-west-2:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    sa-east-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    eu-west-3:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    us-gov-west-1:
-      '1': db.m4.large
-      '2': db.m4.large
-      '3': db.m4.xlarge
-      '4': db.m4.xlarge
-    me-south-1:
-      '1': db.m5.large
-      '2': db.m5.large
-      '3': db.m5.xlarge
-      '4': db.m5.xlarge
-    us-gov-east-1:
-      '1': db.r4.large
-      '2': db.r4.large
-      '3': db.r4.xlarge
-      '4': db.r4.xlarge
-  DeploymentSize:
-    1-100:
-      Size: '1'
-    101-500:
-      Size: '2'
-    501-1000:
-      Size: '3'
-    1001-2000:
-      Size: '4'
 Resources:
   MasterMP:
     Type: AWS::CloudFormation::Stack
+    DependsOn: Infrastructure
     Condition: PerHostSupportedRegion
     Properties:
       TemplateURL:
         !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/marketplace/master-mp.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/rhel/master-rhel.template'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AWSIKeyPairName: !Ref AWSKeyPairName
-        AWSIVPC: !Ref AWSVPC
-        DSISubnetID: !Ref DeepSecuritySubnet
-        DBIRDSInstanceSize:
-          !FindInMap
-          - RDSInstanceSize
-          - !Ref AWS::Region
-          - !FindInMap
-            - DeploymentSize
-            - !Ref ProtectedInstances
-            - Size
-        DBIStorageAllocation:
-          !FindInMap
-          - RDSStorageSize
-          - !Ref ProtectedInstances
-          - Size
+        AWSIVPC: !GetAtt Infrastructure.Outputs.VPCID
+        DSISubnetID: !GetAtt Infrastructure.Outputs.PublicSubnet
+        DBIRDSInstanceSize: db.m5.large
+        DBIStorageAllocation: '10'
         DBPBackupDays: '5'
         DBPCreateDbInstance: 'Yes'
         DBICAdminName: dsmadmin
         DBICAdminPassword: !Ref DeepSecurityAdminPass
-        DBPEngine: PostgreSQL
+        DBPEngine: PostgresDocker
         DBPEndpoint: ''
         DBPName: dsm
         DSCAdminName: !Ref DeepSecurityAdminName
@@ -392,17 +217,23 @@ Resources:
           !FindInMap
           - DSMSIZE
           - !Ref AWS::Region
-          - !FindInMap
-            - DeploymentSize
-            - !Ref ProtectedInstances
-            - Size
-        DBISubnet1: !Ref DatabaseSubnet1
-        DBISubnet2: !Ref DatabaseSubnet2
-        DSIPLicense: PerHost
+          - '1'
+        DBISubnet1: !GetAtt Infrastructure.Outputs.PublicSubnet
+        DBISubnet2: !GetAtt Infrastructure.Outputs.PrivateSubnet2
         DBPMultiAZ: 'true'
         QSS3BucketName: !Ref QSS3BucketName
         QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
+  Infrastructure:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/quickstart/Infrastructure.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      Parameters:
+        EnableDNSHostNames: 'true'
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   PerHostSupportedRegion:
