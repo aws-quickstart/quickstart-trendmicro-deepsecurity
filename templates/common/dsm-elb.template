@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'v5.32: Deploys Elastic Load Balancers and Security Groups for Deep Security
-  (qs-1ngr590je). Manager.'
+  Manager.(qs-1ngr590je)'
 Parameters:
   AWSIVPC:
     Description: Existing VPC to deploy Deep Security Manager

@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'This template is used strictly for CI entrypoints. It is not designed to be launched outside of the CI/CD Pipeline of the AWS QuickStart Team'
+Description: 'This template is used strictly for CI entrypoints. It is not designed to be launched outside of the CI/CD Pipeline of the AWS QuickStart Team. (qs-1r17m59ba)'
 Parameters:
   KeyPairName:
     Description: Select an existing key pair to use for connecting to your Deep Security
