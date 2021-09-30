@@ -1,8 +1,11 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.42: Trend Micro Deep Security Marketplace master template. For more
+Description: 'v5.44: Trend Micro Deep Security Marketplace main template. For more
   information see http://aws.trendmicro.com. (qs-1ngr590jt)'
 Metadata:
+  cfn-lint:
+    config:
+      ignore_checks: [W3005,W7001,W8001]
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
@@ -100,22 +103,16 @@ Parameters:
     Description: Existing key pair to use for connecting to your Deep Security Manager
       Instance
     Type: AWS::EC2::KeyPair::KeyName
-    MinLength: '1'
-    MaxLength: '255'
     ConstraintDescription: Select an existing EC2 Key Pair.
   AWSIVPC:
     Description: Existing VPC to deploy Deep Security Manager. Must contain at least
       1 public and 2 private subnets
     Type: AWS::EC2::VPC::Id
-    MinLength: '1'
-    MaxLength: '255'
     AllowedPattern: '[-_a-zA-Z0-9]*'
   DSISubnetID:
     Description: Choose a public subnet for Deep Security Manager. Must be in same
       AZ as primary RDS subnet.
     Type: AWS::EC2::Subnet::Id
-    MinLength: '1'
-    MaxLength: '255'
     AllowedPattern: '[-_a-zA-Z0-9]*'
     ConstraintDescription: Subnet ID must exist in the chosen VPC
   DBIRDSInstanceSize:
@@ -216,7 +213,7 @@ Parameters:
     ConstraintDescription: must begin with a letter and contain only alphanumeric
       characters.
   DSCAdminName:
-    Default: MasterAdmin
+    Default: admin
     Description: The Deep Security Manager administrator account username for Web
       Console Access
     Type: String
@@ -621,7 +618,7 @@ Resources:
     - DSMNode1
     Properties:
       Handle: !Ref DSM1CompleteWaitHandle
-      Timeout: '1800'
+      Timeout: '3000'
   DSM1NoDBCompleteWaitHandle:
     Condition: DoNotLaunchRDSInstance
     Type: AWS::CloudFormation::WaitConditionHandle
@@ -632,7 +629,7 @@ Resources:
     - DSMNode1NoDB
     Properties:
       Handle: !Ref DSM1CompleteWaitHandle
-      Timeout: '1800'
+      Timeout: '3000'
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   DSIsMultiNode:

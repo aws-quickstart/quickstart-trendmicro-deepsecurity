@@ -1,16 +1,18 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'This template is used strictly for CI entrypoints. It is not designed to be launched outside of the CI/CD Pipeline of the AWS QuickStart Team. (qs-1r17m59ba)'
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks: [W2001,W8001,W7001]
 Parameters:
   KeyPairName:
     Description: Select an existing key pair to use for connecting to your Deep Security
       Manager Instance.
     Type: AWS::EC2::KeyPair::KeyName
-    MinLength: '1'
-    MaxLength: '255'
     ConstraintDescription: Select an existing EC2 Key Pair.
   DeepSecurityAdminName:
-    Default: MasterAdmin
+    Default: admin
     Description: The Deep Security Manager administrator username for Web Console
       Access.
     Type: String
@@ -265,7 +267,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/quickstart/trendmicro-deepsecurity-master.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/quickstart/trendmicro-deepsecurity-main.template'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
@@ -290,4 +292,3 @@ Conditions:
     !Equals
     - !Ref AWS::Region
     - us-gov-west-1
-
