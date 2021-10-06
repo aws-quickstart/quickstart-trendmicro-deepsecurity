@@ -8,6 +8,9 @@ Metadata:
   cfn-lint:
     config:
       ignore_checks: [W2001,W4002]
+      ignore_reasons:
+        W2001:'Parameters are referenced by other template'
+        W4002:'Using NoEcho parameters as the scripte input'
 Parameters:
   AWSIKeyPairName:
     Description: Existing key pair to use for connecting to your Deep Security Manager

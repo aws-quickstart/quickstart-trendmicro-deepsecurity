@@ -6,6 +6,9 @@ Metadata:
   cfn-lint:
     config:
       ignore_checks: [W2001,W8001]
+      ignore_reasons:
+        W2001:'Parameters are referenced by other template'
+        W8001:'Conditions are referenced by other template'
 Parameters:
   AWSIKeyPairName:
     Description: Existing key pair to use for connecting to database if using Postgres on Docker

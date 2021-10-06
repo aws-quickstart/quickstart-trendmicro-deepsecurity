@@ -6,6 +6,8 @@ Metadata:
   cfn-lint:
     config:
       ignore_checks: [W8001]
+      ignore_reasons:
+        W8001:'Conditions are referenced by other template'
 Parameters:
   AWSIVPC:
     Description: Existing VPC to deploy Deep Security Manager

@@ -5,6 +5,10 @@ Metadata:
   cfn-lint:
     config:
       ignore_checks: [W2001,W8001,W7001]
+      ignore_reasons:
+        W2001:'Parameters are referenced by other template'
+        W7001:'Definition is used by another template'
+        W8001:'Conditions are referenced by other template'
 Parameters:
   KeyPairName:
     Description: Select an existing key pair to use for connecting to your Deep Security
