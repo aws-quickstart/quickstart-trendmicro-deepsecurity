@@ -1,14 +1,15 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.48: This template is an abstraction layer for choosing PostgreSQL,
+Description: 'v5.49: This template is an abstraction layer for choosing PostgreSQL,
   Oracle or MSSQL when deploying Deep Security Manager. (qs-1ngr590i4)'
 Metadata:
   cfn-lint:
     config:
-      ignore_checks: [W2001,W8001]
+      ignore_checks: [W2001,W8001,E9010]
       ignore_reasons:
         W2001:'Parameters are referenced by other template'
         W8001:'Conditions are referenced by other template'
+        E9010:'Definition is used by another template'
 Parameters:
   AWSIKeyPairName:
     Description: Existing key pair to use for connecting to database if using Postgres on Docker
@@ -156,7 +157,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-oracle-rds.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-oracle-rds.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 65
@@ -176,7 +177,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-mssql-rds.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-mssql-rds.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 65
@@ -196,7 +197,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-postgresql-rds.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-postgresql-rds.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 65
@@ -216,7 +217,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-postgresql-rds-aurora.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-postgresql-rds-aurora.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 65
@@ -241,7 +242,7 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-postgresql-docker.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/common/db/ds-db-postgresql-docker.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 15
