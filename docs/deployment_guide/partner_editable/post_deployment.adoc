@@ -8,7 +8,7 @@ Amazon Web Services – Trend Micro Deep Security on the AWS Cloud
 
 [#outputs1]
 .Choosing the Link to Deep Security Manager Console
-image::../deployment_guide/images/outputs.png[Outputs]
+image::../docs/deployment_guide/images/outputs.png[Outputs]
 
 === Update the Load Balancer Certificate
 
@@ -16,15 +16,15 @@ The Elastic Load Balancing (ELB) load balancer used by the Deep Security Manager
 
 [#elb1]
 .Updating the Load Balancer Certificate
-image::../deployment_guide/images/elb1.png[elb]
+image::../docs/deployment_guide/images/elb1.png[elb]
 
 [#elb2]
 .Updating the Load Balancer Certificate
-image::../deployment_guide/images/elb2.png[elb]
+image::../docs/deployment_guide/images/elb2.png[elb]
 
 [#elb3]
 .Updating the Load Balancer Certificate
-image::../deployment_guide/images/elb3.png[elb]
+image::../docs/deployment_guide/images/elb3.png[elb]
 
 Deep Security is meant to run as part of your core infrastructure. As a result, its attack surface should be minimized. The Quick Start helps reduce this attack service by:
 
