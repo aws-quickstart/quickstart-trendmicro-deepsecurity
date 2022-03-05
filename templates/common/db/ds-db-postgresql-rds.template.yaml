@@ -1,13 +1,12 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.47: This template deploys an MSSQL RDS Instance for Deep Security
-  Manager. (qs-1ngr590ij)'
+Description: 'v5.49: This template deploys a PostgreSQL RDS instance for Deep Security
+  Manager. (qs-1ngr590ie)'
 Metadata:
   cfn-lint:
     config:
-      ignore_checks: [W2001,W8001]
+      ignore_checks: [W8001]
       ignore_reasons:
-        W2001:'Parameters are referenced by other template'
         W8001:'Conditions are referenced by other template'
 Parameters:
   DBIRDSInstanceSize:
@@ -26,11 +25,19 @@ Parameters:
     - db.m3.large
     - db.m3.xlarge
     - db.m3.2xlarge
+    - db.m2.xlarge
     - db.r3.large
     - db.r3.xlarge
     - db.r3.2xlarge
     - db.r3.4xlarge
     - db.r3.8xlarge
+    - db.m2.2xlarge
+    - db.m2.4xlarge
+    - db.m1.medium
+    - db.m1.large
+    - db.m1.xlarge
+    - db.m4.large
+    - db.m4.xlarge
     - db.r4.large
     - db.r4.xlarge
     ConstraintDescription: must select a valid database instance type.
@@ -40,7 +47,7 @@ Parameters:
     Type: Number
     MinValue: 10
     MaxValue: 3072
-    ConstraintDescription: must be between 100 and 3072Gb.
+    ConstraintDescription: must be between 10 and 3072Gb.
   DBPBackupDays:
     Default: 1
     Description: Days to keep automatic RDS backups (0-35)
@@ -95,12 +102,13 @@ Resources:
   DSDatabase:
     Type: AWS::RDS::DBInstance
     Properties:
-      LicenseModel: license-included
+      LicenseModel: postgresql-license
       PubliclyAccessible: false
+      DBName: !Ref DBPName
       AllocatedStorage: !Ref DBIStorageAllocation
       DBInstanceClass: !Ref DBIRDSInstanceSize
-      Engine: sqlserver-se
-      EngineVersion: 12.00.5571.0.v1
+      Engine: postgres
+      EngineVersion: '11.9'
       MasterUsername: !Ref DBICAdminName
       MasterUserPassword: !Ref DBICAdminPassword
       VPCSecurityGroups:
@@ -114,11 +122,14 @@ Resources:
       - Key: Application
         Value: Deep Security Manager
 Conditions:
-  DBISubnetGroupNameSpecified:
-    !Not
-    - !Equals
-      - !Ref DBISubnetGroupName
-      - ''
+  RegionIsUsGovCloud:
+    !Equals
+    - !Ref AWS::Region
+    - us-gov-west-1
+  MultiAZ:
+    !Equals
+    - !Ref MultiAZ
+    - 'true'
 Outputs:
   DSDBEndpoint:
     Description: Endpoint to be passed to DSM installation properties file

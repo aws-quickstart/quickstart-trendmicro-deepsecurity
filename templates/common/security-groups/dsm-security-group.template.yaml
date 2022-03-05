@@ -1,7 +1,14 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.47: This template creates security groups for the ELB for Deep Security
-  Manager. (qs-1ngr590io)'
+Description: 'v5.49: This template creates the security group to allow inbound communication
+  to Deep Security Manager. (qs-1ngr590iu)'
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks: [W2001,E9010]
+      ignore_reasons:
+        W2001:'Parameters are referenced by other template'
+        E9010:'Definition is used by another template'
 Parameters:
   AWSIVPC:
     Description: Existing VPC to deploy Deep Security Manager
@@ -23,31 +30,18 @@ Parameters:
     Default: '4120'
     ConstraintDescription: Must be a valid TCP port.
 Resources:
-  ELBSG:
+  DSMSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: AllowGUIandHeartbeat
+      GroupDescription: Allow GUI, Hearbeat, and 4122 inbound to DSMs from ELB
       VpcId: !Ref AWSIVPC
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: !Ref DSIPHeartbeatPort
-        ToPort: !Ref DSIPHeartbeatPort
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: !Ref DSIPGUIPort
-        ToPort: !Ref DSIPGUIPort
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: 4122
-        ToPort: 4122
-        CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
       - IpProtocol: '-1'
         CidrIp: 0.0.0.0/0
       Tags:
       - Key: Name
-        Value: DSMELBSG
+        Value: DSMSG
 Outputs:
-  ELBSG:
-    Value: !Ref ELBSG
+  DSMSG:
+    Value: !Ref DSMSG
 ...

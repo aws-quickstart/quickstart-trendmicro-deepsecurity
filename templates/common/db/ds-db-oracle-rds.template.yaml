@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'v5.47: This template deploys a PostgreSQL RDS instance for Deep Security
-  Manager. (qs-1ngr590ie)'
+Description: 'v5.49: This template deploys an Oracle RDS instance for Deep Security
+  Manager. (qs-1ngr590i9)'
 Metadata:
   cfn-lint:
     config:
@@ -17,29 +17,24 @@ Parameters:
     - db.m5.large
     - db.m5.xlarge
     - db.m5.2xlarge
+    - db.m5.4xlarge
     - db.m4.large
     - db.m4.xlarge
     - db.m4.2xlarge
     - db.m4.4xlarge
-    - db.m3.medium
-    - db.m3.large
-    - db.m3.xlarge
-    - db.m3.2xlarge
-    - db.m2.xlarge
-    - db.r3.large
-    - db.r3.xlarge
-    - db.r3.2xlarge
-    - db.r3.4xlarge
-    - db.r3.8xlarge
-    - db.m2.2xlarge
-    - db.m2.4xlarge
-    - db.m1.medium
-    - db.m1.large
-    - db.m1.xlarge
-    - db.m4.large
-    - db.m4.xlarge
     - db.r4.large
     - db.r4.xlarge
+    - db.r4.2xlarge
+    - db.r4.4xlarge
+    - db.r5.large
+    - db.r5.xlarge
+    - db.r5.2xlarge
+    - db.r5.4xlarge
+    - db.t3.small
+    - db.t3.medium
+    - db.t3.large
+    - db.t3.xlarge
+    - db.t3.2xlarge
     ConstraintDescription: must select a valid database instance type.
   DBIStorageAllocation:
     Default: 10
@@ -102,13 +97,13 @@ Resources:
   DSDatabase:
     Type: AWS::RDS::DBInstance
     Properties:
-      LicenseModel: postgresql-license
+      LicenseModel: license-included
       PubliclyAccessible: false
       DBName: !Ref DBPName
       AllocatedStorage: !Ref DBIStorageAllocation
       DBInstanceClass: !Ref DBIRDSInstanceSize
-      Engine: postgres
-      EngineVersion: '11.9'
+      Engine: oracle-se2
+      EngineVersion: 19.0.0.0.ru-2020-04.rur-2020-04.r1
       MasterUsername: !Ref DBICAdminName
       MasterUserPassword: !Ref DBICAdminPassword
       VPCSecurityGroups:
@@ -122,10 +117,6 @@ Resources:
       - Key: Application
         Value: Deep Security Manager
 Conditions:
-  RegionIsUsGovCloud:
-    !Equals
-    - !Ref AWS::Region
-    - us-gov-west-1
   MultiAZ:
     !Equals
     - !Ref MultiAZ

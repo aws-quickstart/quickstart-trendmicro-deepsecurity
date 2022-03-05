@@ -1,0 +1,37 @@
+project:
+  name: quickstart-trendmicro-deepsecurity
+  owner: quickstart@amazon.com
+  package_lambda: false
+  regions:
+  - us-east-1
+  - us-east-2
+  - us-west-1
+  - us-west-2
+  - ca-central-1
+  - ap-south-1
+  - ap-northeast-2
+  - ap-southeast-1
+  - ap-southeast-2
+  - ap-northeast-1
+  - eu-central-1
+  - eu-west-1
+  - eu-west-2
+  - sa-east-1
+  - eu-west-3
+  - us-gov-west-1
+  s3_bucket: ''
+tests:
+  test-deepsec:
+    parameters:
+      AvailabilityZones: $[taskcat_genaz_3]
+      DeepSecurityAdminPass: $[taskcat_genpass_8A]
+      KeyPairName: override
+      ProtectedInstances: 1-100
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+    regions:
+    - us-east-2
+    - eu-west-1
+    - us-east-1
+    s3_bucket: ''
+    template: templates/quickstart/trendmicro-deepsecurity-vpc.template.yaml
