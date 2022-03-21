@@ -1,0 +1,6 @@
+Run the following commands from an IDE or terminal that has Terraform installed.
+
+. Initialize the environment: `+terraform init+`
+. Verify that the deployed architecture is correct: `+terraform plan+`
+. Validate the code: `+terraform validate+`
+. Deploy the infrastructure: `+terraform apply+`
