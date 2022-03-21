@@ -1,7 +1,0 @@
-== Prepare for the migration
-
-=== Prerequisites
-
-=== Discovery and assessment
-
-=== Security and compliance

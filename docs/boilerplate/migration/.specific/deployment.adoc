@@ -1,4 +1,0 @@
-
-== Deployment
-
-// Points to deployment guide for details.
