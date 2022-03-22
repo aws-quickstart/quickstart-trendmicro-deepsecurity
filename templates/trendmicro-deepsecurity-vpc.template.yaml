@@ -16,6 +16,16 @@ Parameters:
       Manager Instance.
     Type: AWS::EC2::KeyPair::KeyName
     ConstraintDescription: Select an existing EC2 Key Pair.
+  DeepSecurityAdminName:
+    Default: admin
+    Description: The Deep Security Manager administrator username for Web Console
+      Access.
+    Type: String
+    MinLength: 1
+    MaxLength: 16
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric
+      characters. Min length 1, max length 16
   DeepSecurityAdminPass:
     NoEcho: true
     Description: The Deep Security Manager administrator password. Must be 8-41 characters
