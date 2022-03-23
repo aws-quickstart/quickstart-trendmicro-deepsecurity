@@ -7,8 +7,8 @@ The following licensing options are available:
 
 * https://aws.amazon.com/marketplace/pp/B01AVYHVHO[Per Protected Instance Hour:^] A consumption-based option that allows you to pay hourly per protected instance. Your costs are determined by the number of instances you protect per hour. For current prices, refer to https://aws.amazon.com/marketplace/pp/prodview-2xurbznbep5eu?ie=UTF8&pf_rd_r=1ADE0R3W5N355TQF48A2&pf_rd_m=A33KC2ESLMUT5Y&pf_rd_t=101&pf_rd_i=awsmp-gateway-1&pf_rd_p=2475466602&pf_rd_s=center-2#pdp-pricing[Pricing Information^].
 
-* https://aws.amazon.com/marketplace/pp/B00OCI4H82[Bring Your Own License (BYOL):^] A perpetual license for organizations that prefer traditional procurement. For more information, contact https://helpcenter.trendmicro.com/en-US/contact-support/[Trend Micro^].
+* https://aws.amazon.com/marketplace/pp/B00OCI4H82[Bring Your Own License (BYOL):^] A perpetual license for organizations that prefer traditional procurement. For more information, contact aws@trendmicro.com.
 
-NOTE: This Quick Start supports a deployment of up to 2,000 protected instances. If you protect more than 2,000 instances, contact https://helpcenter.trendmicro.com/en-US/contact-support/[Trend Micro^].
+NOTE: This Quick Start supports a deployment of up to 2,000 protected instances. If you protect more than 2,000 instances, contact aws@trendmicro.com.
 
 NOTE: Both licensing options can be launched in the AWS GovCloud (US) Region.
