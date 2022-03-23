@@ -2,47 +2,45 @@
 
 == Postdeployment steps
 
-=== Log in to the Deep Security Manager Console
-The Outputs tab of the AWS CloudFormation stack provides a URL to the Deep Security Manager web interface. Choose this link and log in using the user name and password you supplied during the launch of the template.
-Amazon Web Services – Trend Micro Deep Security on the AWS Cloud
+=== Log in to the Deep Security Manager console
+Navigate to the *Outputs* tab of the AWS CloudFormation stack, which provides a URL to the Deep Security Manager interface. Choose this link and log in using the user name and password you supplied during the launch of the template.
 
 [#outputs1]
-.Choosing the Link to Deep Security Manager Console
+.Choosing the Link to Deep Security Manager console
 image::../docs/deployment_guide/images/outputs.png[Outputs]
 
-=== Update the Load Balancer Certificate
+=== Elastic Load Balancing certificate
 
-The Elastic Load Balancing (ELB) load balancer used by the Deep Security Manager is initially configured to use a self-signed certificate for HTTPS connections. Your browser may give you an error when you try to access the console. This is expected until you update the load balancer certificate. You can proceed through to the management console.
+Elastic Load Balancing for Deep Security Manager is initially configured to use a self-signed certificate for HTTPS connections. Your browser may give you an error when you try to access the console. If you update the Elastic Load Balancing certificate, you can then proceed to the Deep Security Manager console.
 
 [#elb1]
-.Updating the Load Balancer Certificate
-image::../docs/deployment_guide/images/elb1.png[elb]
+.Updating the Elastic Load Balancing certificate
+image::../docs/deployment_guide/images/elb1.png[Elastic Load Balancing]
 
 [#elb2]
-.Updating the Load Balancer Certificate
-image::../docs/deployment_guide/images/elb2.png[elb]
+.Updating the Elastic Load Balancing certificate
+image::../docs/deployment_guide/images/elb2.png[Elastic Load Balancing]
 
 [#elb3]
-.Updating the Load Balancer Certificate
-image::../docs/deployment_guide/images/elb3.png[elb]
+.Updating the Elastic Load Balancing certificate
+image::../docs/deployment_guide/images/elb3.png[Elastic Load Balancing]
 
-Deep Security is meant to run as part of your core infrastructure. As a result, its attack surface should be minimized. The Quick Start helps reduce this attack service by:
+Deep Security runs as part of your core infrastructure. As a result, its attack surface should be minimized. This Quick Start helps reduce this attack service by:
 
-* Using Security Groups to restrict traffic to only that which is needed.
-* Deploying a Deep Security Agent on the manager instance to protect it from attack.
-*  Leveraging the robust role-based access controls available within the platform to ensure that only valid users have access to the platform.
+* Using security groups to restrict traffic.
+* Deploying a Deep Security Agent on the Manager instance.
+* Using role-based access controls within the platform to help ensure that only valid users have access to the platform.
 
-The Deep Security Manager is initially configured to use a public load balancer so it can easily protect instances in AWS Regions and AWS accounts outside where it's deployed. If you do not require this functionality and do not require the Deep Security Manager console to be accessible from the internet, we recommend that you reconfigure the Deep Security Manager to use a private load balancer to further reduce the attack surface. You can also set
-up http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-peering.html[VPC peering] if you'd like to use a private load balancer and still protect instances outside the VPC where the Deep Security Manager is deployed.
+The Deep Security Manager is initially configured to use a public load balancer so it can protect instances in AWS Regions and AWS accounts outside where it's deployed. If you don't require this functionality and don't require the Deep Security Manager console to be accessible from the internet, reconfigure Deep Security Manager to use a private load balancer to further reduce the attack surface. If you want to use a private load balancer and still protect instances outside the VPC where Deep Security Manager is deployed, refer to https://docs.aws.amazon.com/vpc/latest/userguide/vpc-peering.html[Connect VPCs using VPC peering^].
 
-If you are using the Quick Start as the basis of a production deployment and not as a proof of concept, we strongly recommend that you update the self-signed certificate to a certificate that is signed by a trusted Certificate Authority.
+If you are using the Quick Start as the basis of a production deployment and not as a proof of concept, update the self-signed certificate to a certificate that is signed by a trusted certificate authority.
 
-NOTE: In order to obtain a signed certificate, you will be required by the Certificate Authority to specify a formal subdomain (for example, deepsecurityconsole.mycompany.com) and use this to access the Deep Security load balancer.
+NOTE: To obtain a signed certificate, you are required by the certificate authority to specify a formal subdomain (for example, `deepsecurityconsole.mycompany.com`) and use this to access the Deep Security load balancer.
 
 To update the security certificate of the load balancer, follow these steps:
 
-. Register a domain name that you will use to access the Deep Security Manager console.
-. Obtain a certificate for this domain from a trusted Certificate Authority.
-. Add the certificate to your certificate store. Instructions on how to do this can be found in the http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html[Identity and Access Management documentation].
-. Update the DNS settings of the load balancer to use the new domain name. Detailed instructions on how to do that can be found in the http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/using-domain-names-with-elb.html[Elastic Load Balancing documentation].
-. Replace the SSL certificate of the load balancer. Detailed instructions on how to do that can be found in the http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/using-domain-names-with-elb.html[Elastic Load Balancing documentation].
+. Register the domain name that you use to access the Deep Security Manager console.
+. Obtain a certificate for this domain from a trusted certificate authority.
+. Add the certificate to your certificate store. For more information, refer to https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html[Managing server certificates in IAM^].
+. Update the DNS settings of the load balancer to use the new domain name. For more information, refer to https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/using-domain-names-with-elb.html[Configure a custom domain name for your Classic Load Balancer^].
+. Replace the SSL certificate of the load balancer. For more information, refer to https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/using-domain-names-with-elb.html[Configure a custom domain name for your Classic Load Balancer^].

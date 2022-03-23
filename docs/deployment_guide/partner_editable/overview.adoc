@@ -1,9 +1,3 @@
-This Quick Start deploys {partner-product-name} on the AWS Cloud. If you are unfamiliar with AWS Quick Starts, see the https://aws-ia.github.io/content/qs_info.html[AWS Quick Start General Content Guide^].
+This Quick Start deploys {partner-product-name} on the AWS Cloud. If you are unfamiliar with AWS Quick Starts, see the https://fwd.aws/rA69w?[AWS Quick Start General Information Guide^]. For more information about Deep Security, refer to https://www.trendmicro.com/en_us/business/products/hybrid-cloud/deep-security.html[Deep Security Software^].
 
-Trend Micro Deep Security is a host-based security product that provides Anti-Malware, Host Firewall, Intrusion Prevention, File Integrity Monitoring, Log Inspection, Web Application Firewalling, and Content Filtering modules in a single agent running in the guest operating system. 
-
-This guide covers how to deploy Trend Micro Deep Security using these templates. It does not cover other aspects of administering Deep Security. For information about administering Deep Security, see the https://help.deepsecurity.trendmicro.com/hc/en-us[Trend Micro Deep Security Help Center] 
-
-// For advanced information about the product that this Quick Start deploys, see the https://{quickstart-github-org}.github.io/{quickstart-project-name}/operational/index.html[Operational guide^].
-
-// For information about using this Quick Start for migrations, see the https://{quickstart-github-org}.github.io/{quickstart-project-name}/migration/index.html[Migration guide^].
+This guide covers how to deploy Trend Micro Deep Security using the supplied templates. It does not cover other aspects of administering Deep Security. For more information about administering Deep Security, refer to the https://help.deepsecurity.trendmicro.com/20_0/on-premise/welcome.html[Trend Micro Deep Security Help Center^].

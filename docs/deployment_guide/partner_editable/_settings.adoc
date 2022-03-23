@@ -3,12 +3,12 @@
 :partner-product-name: Trend Micro Deep Security
 :partner-product-short-name: Deep Security
 :partner-company-name: Trend Micro
-:doc-month: February
+:doc-month: March
 :doc-year: 2022
 :partner-contributors: {partner-company-name}
 // :other-contributors: Akua Mansa, Trek10
 //:aws-contributors: Janine Singh, AWS IoT Partner team
 :aws-ia-contributors: Tony Bulding, AWS Integration & Automation team
-:deployment_time: 60 minutes
+:deployment_time: 1 hour
 :default_deployment_region: us-east-1
 // :private_repo:
