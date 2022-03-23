@@ -1,0 +1,5 @@
+// Include details about any licenses and how to sign up. Provide links as appropriate.
+
+There is no cost to use this Quick Start, but you will be billed for any AWS services or resources that this Quick Start deploys. For more information, refer to the https://fwd.aws/rA69w?[AWS Quick Start General Information Guide^].
+
+You must have a license for Trend Micro Deep Security before you launch this Quick Start. For more information, refer to the link:#_deployment_options[Predeployment] section of this guide.
