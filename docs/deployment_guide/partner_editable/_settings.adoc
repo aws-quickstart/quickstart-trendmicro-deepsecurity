@@ -3,7 +3,7 @@
 :partner-product-name: Trend Micro Deep Security
 :partner-product-short-name: Deep Security
 :partner-company-name: Trend Micro
-:doc-month: March
+:doc-month: May
 :doc-year: 2022
 :partner-contributors: {partner-company-name}
 // :other-contributors: Akua Mansa, Trek10
