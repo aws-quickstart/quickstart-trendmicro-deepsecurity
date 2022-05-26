@@ -9,6 +9,9 @@ The following licensing options are available:
 
 * https://aws.amazon.com/marketplace/pp/B00OCI4H82[Bring Your Own License (BYOL):^] A perpetual license for organizations that prefer traditional procurement. For more information, contact aws@trendmicro.com.
 
-NOTE: This Quick Start supports a deployment of up to 2,000 protected instances. If you protect more than 2,000 instances, contact aws@trendmicro.com.
+[NOTE]
 
-NOTE: Both licensing options can be launched in the AWS GovCloud (US) Region.
+--
+* This Quick Start supports a deployment of up to 2,000 protected instances. If you protect more than 2,000 instances, contact aws@trendmicro.com.
+* Both licensing options can be launched in the AWS GovCloud (US) Region.
+--
