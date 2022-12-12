@@ -1,7 +1,7 @@
 == Predeployment steps
 
 === Subscribe to Trend Micro Deep Security
-Before you launch this Quick Start, subscribe to the Amazon Machine Image (AMI) from AWS Marketplace for Trend Micro Deep Security.
+Before you launch this Partner Solution, subscribe to the Amazon Machine Image (AMI) from AWS Marketplace for Trend Micro Deep Security.
 
 The following licensing options are available:
 
@@ -12,6 +12,6 @@ The following licensing options are available:
 [NOTE]
 
 --
-* This Quick Start supports a deployment of up to 2,000 protected instances. If you protect more than 2,000 instances, contact aws@trendmicro.com.
+* This Partner Solution supports a deployment of up to 2,000 protected instances. If you protect more than 2,000 instances, contact aws@trendmicro.com.
 * Both licensing options can be launched in the AWS GovCloud (US) Region.
 --
