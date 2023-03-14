@@ -1,13 +1,13 @@
 :xrefstyle: short
 
-Deploying this Quick Start with default parameters builds the following {partner-product-short-name} environment in the
+Deploying this Partner Solution with default parameters builds the following {partner-product-short-name} environment in the
 AWS Cloud.
 
 [#architecture1]
-.Quick Start architecture for {partner-product-short-name} on AWS
+.Partner Solution architecture for {partner-product-short-name} on AWS
 image::../docs/deployment_guide/images/architecture_diagram.png[Architecture]
 
-As shown in <<architecture1>>, this Quick Start sets up the following:
+As shown in <<architecture1>>, this Partner Solution sets up the following:
 
 * A highly available architecture that spans two Availability Zones.*
 * A virtual private cloud (VPC) configured with public and private subnets, according to AWS
@@ -19,4 +19,4 @@ best practices, to provide you with your own virtual network on AWS.*
 * In the private subnets:
 ** Amazon Relational Database Service (Amazon RDS) to set up, operate, and scale a relational database.
 
-[.small]#* The template that deploys this Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
+[.small]#* The template that deploys this Partner Solution into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#

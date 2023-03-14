@@ -25,7 +25,7 @@ image::../docs/deployment_guide/images/elb2.png[Elastic Load Balancing]
 .Updating the Elastic Load Balancing certificate
 image::../docs/deployment_guide/images/elb3.png[Elastic Load Balancing]
 
-Deep Security runs as part of your core infrastructure. As a result, its attack surface should be minimized. This Quick Start helps reduce this attack service by:
+Deep Security runs as part of your core infrastructure. As a result, its attack surface should be minimized. This Partner Solution helps reduce this attack service by:
 
 * Using security groups to restrict traffic.
 * Deploying a Deep Security Agent on the Manager instance.
@@ -33,7 +33,7 @@ Deep Security runs as part of your core infrastructure. As a result, its attack 
 
 The Deep Security Manager is initially configured to use a public load balancer so it can protect instances in AWS Regions and AWS accounts outside of where it is deployed. If you don't require this functionality and don't require the Deep Security Manager console to be accessible from the internet, reconfigure Deep Security Manager to use a private load balancer to further reduce the attack surface. If you want to use a private load balancer and still protect instances outside the VPC where Deep Security Manager is deployed, refer to https://docs.aws.amazon.com/vpc/latest/userguide/vpc-peering.html[Connect VPCs using VPC peering^].
 
-If you are using the Quick Start as the basis of a production deployment and not as a proof of concept, update the self-signed certificate to a certificate that is signed by a trusted certificate authority.
+If you are using the Partner Solution as the basis of a production deployment and not as a proof of concept, update the self-signed certificate to a certificate that is signed by a trusted certificate authority.
 
 NOTE: To obtain a signed certificate, you are required by the certificate authority to specify a formal subdomain (for example, `deepsecurityconsole.mycompany.com`) and use this to access the Deep Security load balancer.
 
