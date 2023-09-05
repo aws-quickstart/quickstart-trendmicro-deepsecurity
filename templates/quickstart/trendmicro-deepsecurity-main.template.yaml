@@ -355,20 +355,20 @@ Mappings:
       '3': db.m5.xlarge
       '4': db.m5.xlarge
     us-gov-west-1:
-      '1': db.m4.large
-      '2': db.m4.large
-      '3': db.m4.xlarge
-      '4': db.m4.xlarge
+      '1': db.m5.large
+      '2': db.m5.large
+      '3': db.m5.xlarge
+      '4': db.m5.xlarge
     me-south-1:
       '1': db.m5.large
       '2': db.m5.large
       '3': db.m5.xlarge
       '4': db.m5.xlarge
     us-gov-east-1:
-      '1': db.r4.large
-      '2': db.r4.large
-      '3': db.r4.xlarge
-      '4': db.r4.xlarge
+      '1': db.m5.large
+      '2': db.m5.large
+      '3': db.m5.xlarge
+      '4': db.m5.xlarge
   DeploymentSize:
     1-100:
       Size: '1'
